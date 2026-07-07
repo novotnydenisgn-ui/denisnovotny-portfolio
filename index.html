@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Denis Novotný — Mentoring & Coaching</title>
+<meta name="description" content="Pomáhám podnikatelům ověřenými metodami získat jasnou mysl a systém, který maximalizuje zisk i dopad jejich podnikání.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DENIS NOVOTNÝ — cinematic scroll portfolio
+   Palette: pearl-cream base, teal/azure accent, cream type
+   ============================================================ */
+:root{
+  --pearl:#f6f2ea;
+  --pearl-2:#efe9dd;
+  --cream:#f9f5ec;
+  --ink:#122b2e;
+  --ink-soft:#3c5a5d;
+  --teal:#0fa8a3;
+  --teal-deep:#0b7f7c;
+  --azure:#8fe6e0;
+  --azure-soft:#d3f4f1;
+  --glass:rgba(255,255,255,.42);
+  --glass-brd:rgba(255,255,255,.65);
+  --dark:#0d2224;
+  --radius:26px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+html,body{height:auto}
+body{
+  background:var(--pearl);
+  color:var(--ink);
+  font-family:"Manrope",system-ui,sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--teal);color:var(--cream)}
+.display{font-family:"Anton",sans-serif;font-weight:400;letter-spacing:.01em;text-transform:uppercase}
+
+/* ---------- film grain ---------- */
+.grain{position:fixed;inset:-100px;pointer-events:none;z-index:120;opacity:.5;mix-blend-mode:multiply}
+.grain::before{
+  content:"";position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  animation:grainShift 1.2s steps(4) infinite;
+}
+@keyframes grainShift{
+  0%{transform:translate(0,0)}25%{transform:translate(-40px,30px)}
+  50%{transform:translate(30px,-45px)}75%{transform:translate(-25px,-20px)}100%{transform:translate(0,0)}
+}
+
+/* ---------- fixed header ---------- */
+.hdr{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px clamp(20px,4vw,56px);
+  mix-blend-mode:multiply;
+}
+.hdr .logo{font-family:"Anton";font-size:20px;letter-spacing:.08em;color:var(--ink);text-decoration:none}
+.hdr .logo em{color:var(--teal);font-style:normal}
+.hdr .cta{
+  font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;
+  border:1.5px solid var(--ink);border-radius:99px;padding:10px 22px;
+  transition:background .3s,color .3s;
+}
+.hdr .cta:hover{background:var(--ink);color:var(--cream)}
+
+/* ---------- HERO (scroll-scrubbed orbit) ---------- */
+.hero{height:480vh;position:relative}
+.hero-stage{position:sticky;top:0;height:100vh;overflow:hidden}
+#orbitCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
+.hero-title{
+  position:absolute;left:0;right:0;top:50%;transform:translateY(-54%);
+  text-align:center;pointer-events:none;z-index:5;
+}
+.hero-title .line{display:block;line-height:.92}
+.hero-title .ch{
+  display:inline-block;
+  font-size:clamp(64px,15.5vw,236px);
+  color:var(--cream);
+  -webkit-text-stroke:1px rgba(13,34,36,.10);
+  text-shadow:0 2px 18px rgba(13,34,36,.14), 0 24px 70px rgba(15,168,163,.18);
+  transform:translateY(120%) rotate(6deg);opacity:0;
+  will-change:transform,opacity;
+}
+.hero-title .ch.sp{width:.35em}
+.hero-sub{
+  position:absolute;left:50%;bottom:11vh;transform:translateX(-50%) translateY(30px);
+  width:min(680px,86vw);text-align:center;z-index:6;opacity:0;
+  will-change:transform,opacity;
+}
+.hero-sub p{
+  font-size:clamp(15px,1.45vw,19px);line-height:1.65;font-weight:600;color:var(--ink-soft);
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:20px;
+  padding:18px 26px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 18px 50px rgba(13,34,36,.10);
+}
+.hero-hint{
+  position:absolute;left:50%;bottom:3.2vh;transform:translateX(-50%);
+  z-index:6;display:flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--teal-deep);
+}
+.hero-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.4}}
+.orbit-badge{
+  position:absolute;top:96px;left:50%;transform:translateX(-50%);z-index:6;
+  font-size:12px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--teal-deep);
+  display:flex;align-items:center;gap:12px;opacity:0;will-change:opacity;
+}
+.orbit-badge::before,.orbit-badge::after{content:"";width:52px;height:1.5px;background:currentColor;opacity:.5}
+
+/* ---------- kinetic marquee ---------- */
+.marquee{
+  position:relative;z-index:4;overflow:hidden;padding:26px 0;
+  background:var(--dark);transform:rotate(-1.4deg) scale(1.03);
+}
+.marquee .track{display:flex;gap:0;width:max-content;will-change:transform}
+.marquee span{
+  font-family:"Anton";font-size:clamp(26px,3.4vw,46px);text-transform:uppercase;
+  color:var(--cream);white-space:nowrap;padding-right:26px;letter-spacing:.04em;
+}
+.marquee span em{color:var(--azure);font-style:normal}
+
+/* ---------- STATS ---------- */
+.stats{position:relative;padding:clamp(90px,14vh,160px) clamp(20px,6vw,90px)}
+.stats-inner{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,40px);
+  max-width:1280px;margin:0 auto;
+}
+.stat{
+  position:relative;text-align:center;padding:clamp(30px,4vw,54px) 16px;
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:var(--radius);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 24px 60px rgba(13,34,36,.08);
+  transform:translateY(60px);opacity:0;will-change:transform,opacity;
+}
+.stat .num{
+  font-family:"Anton";font-size:clamp(56px,7.5vw,110px);line-height:1;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.stat .num i{font-style:normal;color:var(--teal)}
+.stat .lbl{margin-top:12px;font-weight:700;font-size:clamp(13px,1.2vw,16px);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- PILÍŘE (pinned over clip 2) ---------- */
+.pillars{height:400vh;position:relative}
+.pillars-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--dark)}
+#pillarsMedia{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+.pillars-shade{position:absolute;inset:0;background:linear-gradient(100deg,rgba(9,26,28,.88) 22%,rgba(9,26,28,.25) 65%,rgba(9,26,28,.55))}
+.pillars-content{
+  position:relative;z-index:3;height:100%;max-width:1280px;margin:0 auto;
+  padding:0 clamp(20px,5vw,72px);display:flex;flex-direction:column;justify-content:center;
+}
+.pillars-kicker{
+  font-size:13px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--azure);
+  margin-bottom:2.4vh;opacity:0;transform:translateY(24px);will-change:transform,opacity;
+}
+.pillars-h{
+  font-size:clamp(44px,7.2vw,108px);color:var(--cream);line-height:.95;margin-bottom:5.5vh;
+  opacity:0;transform:translateY(30px);will-change:transform,opacity;
+}
+.pillar{
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,2.6vw,36px);align-items:baseline;
+  padding:2.5vh 0;border-top:1px solid rgba(249,245,236,.16);
+  opacity:0;transform:translateX(-46px);will-change:transform,opacity;
+}
+.pillar .n{font-family:"Anton";font-size:clamp(20px,2.2vw,30px);color:var(--teal);letter-spacing:.05em}
+.pillar h3{font-family:"Anton";font-size:clamp(26px,3.6vw,54px);color:var(--cream);text-transform:uppercase;letter-spacing:.02em;line-height:1.05}
+.pillar p{grid-column:2;margin-top:8px;max-width:560px;color:rgba(249,245,236,.72);font-size:clamp(14px,1.25vw,17px);line-height:1.6;font-weight:500}
+
+/* ---------- PRÁCE (over clip 3) ---------- */
+.work{position:relative;overflow:hidden;padding:clamp(110px,16vh,190px) clamp(20px,5vw,72px)}
+#workMedia{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.work-shade{position:absolute;inset:0;background:linear-gradient(180deg,var(--pearl) 0%,rgba(246,242,234,.62) 18%,rgba(246,242,234,.30) 55%,rgba(246,242,234,.86) 100%)}
+.work-inner{position:relative;z-index:3;max-width:1280px;margin:0 auto}
+.work-kicker{font-size:13px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--teal-deep)}
+.work-h{font-size:clamp(46px,7.4vw,112px);line-height:.95;color:var(--ink);margin:18px 0 7vh;max-width:900px}
+.work-h em{font-style:normal;color:var(--teal)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,30px)}
+.card{
+  position:relative;padding:clamp(26px,3vw,42px);min-height:340px;
+  display:flex;flex-direction:column;justify-content:flex-end;gap:14px;
+  background:rgba(255,255,255,.5);border:1px solid var(--glass-brd);border-radius:var(--radius);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 60px rgba(13,34,36,.09);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;
+  transform:translateY(70px);opacity:0;will-change:transform,opacity;
+  cursor:default;
+}
+.card.inview{transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}
+.card:hover{transform:translateY(-14px) rotate(-.6deg) !important;box-shadow:0 40px 90px rgba(15,168,163,.22)}
+.card .idx{
+  position:absolute;top:24px;right:26px;font-family:"Anton";font-size:15px;color:var(--teal);
+  border:1.5px solid var(--teal);border-radius:99px;padding:5px 13px;letter-spacing:.1em;
+}
+.card h3{font-family:"Anton";font-size:clamp(24px,2.5vw,38px);text-transform:uppercase;line-height:1.05;color:var(--ink)}
+.card p{font-size:15px;line-height:1.6;font-weight:600;color:var(--ink-soft)}
+.card .arrow{
+  width:46px;height:46px;border-radius:50%;border:1.5px solid var(--ink);
+  display:grid;place-items:center;font-size:19px;color:var(--ink);
+  transition:background .35s,color .35s,transform .35s;
+}
+.card:hover .arrow{background:var(--teal);border-color:var(--teal);color:#fff;transform:rotate(-45deg)}
+
+/* ---------- FINALE ---------- */
+.finale{
+  position:relative;padding:clamp(130px,20vh,220px) clamp(20px,5vw,72px) clamp(90px,12vh,150px);
+  text-align:center;overflow:hidden;
+}
+.finale::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(46% 60% at 50% 22%,rgba(143,230,224,.5),transparent 70%),
+    radial-gradient(35% 45% at 82% 78%,rgba(15,168,163,.16),transparent 70%),
+    var(--pearl-2);
+}
+.finale-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto}
+.finale-h{font-size:clamp(52px,9vw,150px);line-height:.94;color:var(--ink)}
+.finale-h em{font-style:normal;color:var(--teal)}
+.finale-sub{margin:26px auto 6vh;max-width:560px;font-size:clamp(15px,1.4vw,18px);font-weight:600;line-height:1.65;color:var(--ink-soft)}
+.btns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.btn{
+  font-weight:800;font-size:clamp(15px,1.3vw,18px);text-decoration:none;border-radius:99px;
+  padding:20px 42px;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,background .35s,color .35s;
+  display:inline-flex;align-items:center;gap:12px;
+}
+.btn-primary{
+  background:var(--teal);color:#fff;
+  box-shadow:0 18px 46px rgba(15,168,163,.4);
+}
+.btn-primary:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 28px 66px rgba(15,168,163,.5);background:var(--teal-deep)}
+.btn-ghost{
+  background:var(--glass);color:var(--ink);border:1.5px solid var(--ink);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.btn-ghost:hover{transform:translateY(-5px);background:var(--ink);color:var(--cream)}
+
+/* ---------- footer ---------- */
+.ftr{
+  position:relative;background:var(--dark);color:rgba(249,245,236,.8);
+  padding:64px clamp(20px,5vw,72px) 40px;
+}
+.ftr-grid{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;align-items:flex-end}
+.ftr .big{font-family:"Anton";font-size:clamp(34px,5vw,72px);color:var(--cream);text-transform:uppercase;line-height:1}
+.ftr .big em{color:var(--azure);font-style:normal}
+.ftr-links{display:flex;flex-direction:column;gap:12px;font-weight:700;font-size:15px}
+.ftr-links a{color:rgba(249,245,236,.85);text-decoration:none;display:inline-flex;gap:8px;align-items:center;transition:color .3s}
+.ftr-links a:hover{color:var(--azure)}
+.ftr-bottom{max-width:1280px;margin:44px auto 0;padding-top:22px;border-top:1px solid rgba(249,245,236,.14);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;font-weight:600;color:rgba(249,245,236,.45)}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .stats-inner{grid-template-columns:1fr;gap:16px}
+  .cards{grid-template-columns:1fr}
+  .card{min-height:240px}
+  .pillar p{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){
+  .grain::before{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="hdr">
+  <a class="logo" href="#">DENIS<em>.</em></a>
+  <a class="cta" href="#kontakt">Pojďme mluvit</a>
+</header>
+
+<!-- ============ HERO — scroll-scrubbed 360° orbit ============ -->
+<section class="hero" id="hero">
+  <div class="hero-stage">
+    <canvas id="orbitCanvas"></canvas>
+    <div class="hero-vignette"></div>
+    <div class="orbit-badge" id="orbitBadge">Mentoring &amp; Coaching</div>
+    <h1 class="hero-title display" id="heroTitle" aria-label="Denis Novotný">
+      <span class="line" data-word="DENIS"></span>
+      <span class="line" data-word="NOVOTNÝ"></span>
+    </h1>
+    <div class="hero-sub" id="heroSub">
+      <p>Pomáhám podnikatelům ověřenými metodami získat jasnou mysl a&nbsp;systém, který maximalizuje zisk i&nbsp;dopad jejich podnikání — bez chaosu a&nbsp;provizorních řešení.</p>
+    </div>
+    <div class="hero-hint"><span class="dot"></span> Scrolluj — 360°</div>
+  </div>
+</section>
+
+<!-- ============ kinetic marquee ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="track" id="marqueeTrack">
+    <span>Jasná mysl <em>·</em> Stabilní systém <em>·</em> Maximální dopad <em>·</em>&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============ STATS ============ -->
+<section class="stats" id="stats">
+  <div class="stats-inner">
+    <div class="stat" data-count="250" data-suffix="+">
+      <div class="num"><span class="v">0</span><i class="sfx"></i></div>
+      <div class="lbl">spokojených klientů</div>
+    </div>
+    <div class="stat" data-count="12" data-suffix="">
+      <div class="num"><span class="v">0</span><i class="sfx"></i></div>
+      <div class="lbl">let praxe</div>
+    </div>
+    <div class="stat" data-count="2000" data-suffix="h">
+      <div class="num"><span class="v">0</span><i class="sfx"></i></div>
+      <div class="lbl">koučovací praxe</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TŘI PILÍŘE — pinned over clip 2 ============ -->
+<section class="pillars" id="pilire">
+  <div class="pillars-stage">
+    <canvas id="pillarsMedia"></canvas>
+    <div class="pillars-shade"></div>
+    <div class="pillars-content">
+      <div class="pillars-kicker" data-reveal>Jak spolu pracujeme</div>
+      <h2 class="pillars-h display" data-reveal>Tři pilíře<br>spolupráce</h2>
+      <div class="pillar" data-pillar>
+        <span class="n">01</span>
+        <h3>Transformační skupinové výzvy</h3>
+        <p>Intenzivní společná cesta, kde se v komunitě podnikatelů posouváš rychleji, než bys kdy dokázal sám.</p>
+      </div>
+      <div class="pillar" data-pillar>
+        <span class="n">02</span>
+        <h3>Individuální vedení</h3>
+        <p>Jeden na jednoho. Tvoje podnikání, tvoje mysl a systém šitý přesně na míru tvé situaci.</p>
+      </div>
+      <div class="pillar" data-pillar>
+        <span class="n">03</span>
+        <h3>Sparring partnerství</h3>
+        <p>Dlouhodobý parťák pro velká rozhodnutí — pravidelný sparring, který drží tvůj růst v tempu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRÁCE — over clip 3 ============ -->
+<section class="work" id="prace">
+  <canvas id="workMedia"></canvas>
+  <div class="work-shade"></div>
+  <div class="work-inner">
+    <div class="work-kicker">Co si odneseš</div>
+    <h2 class="work-h display">Výsledky, které <em>zůstávají</em></h2>
+    <div class="cards">
+      <article class="card">
+        <span class="idx">01</span>
+        <h3 class="display">Sebevědomí tvořit ve velkém</h3>
+        <p>Přestaneš přemýšlet v malých krocích a začneš stavět vizi, která tě přesahuje.</p>
+        <span class="arrow">→</span>
+      </article>
+      <article class="card">
+        <span class="idx">02</span>
+        <h3 class="display">Konec stagnace</h3>
+        <p>Rozbiješ kruhy, ve kterých se točíš roky, a znovu ucítíš tah kupředu.</p>
+        <span class="arrow">→</span>
+      </article>
+      <article class="card">
+        <span class="idx">03</span>
+        <h3 class="display">Stabilní systém růstu</h3>
+        <p>Získáš systém, který nese výsledky i ve dnech, kdy zrovna nemáš svůj den.</p>
+        <span class="arrow">→</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINALE ============ -->
+<section class="finale" id="kontakt">
+  <div class="finale-inner">
+    <h2 class="finale-h display">Připraven <em>růst</em>?</h2>
+    <p class="finale-sub">První krok je nezávazný rozhovor. Zjistíme, kde jsi, kam míříš — a jestli si sedneme.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="mailto:novotny.denis.gn@gmail.com?subject=Poj%C4%8Fme%20probrat%20m%C5%AFj%20r%C5%AFst">Pojďme probrat váš růst</a>
+      <a class="btn btn-ghost" href="https://dimi.cz" target="_blank" rel="noopener">Prohlédnout software (dimi.cz)</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="ftr">
+  <div class="ftr-grid">
+    <div class="big">Denis <em>Novotný</em></div>
+    <nav class="ftr-links">
+      <a href="https://dimi.cz" target="_blank" rel="noopener">↗ Web &amp; software — dimi.cz</a>
+      <a href="https://www.instagram.com/denis.selfleadrship/" target="_blank" rel="noopener">↗ Instagram — @denis.selfleadrship</a>
+    </nav>
+  </div>
+  <div class="ftr-bottom">
+    <span>© 2026 Denis Novotný — Mentoring &amp; Coaching</span>
+    <span>Jasná mysl · Stabilní systém · Maximální dopad</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+/* ============================================================
+   ENGINE — Lenis smooth scroll + rAF scrub, no scroll libraries
+   ============================================================ */
+'use strict';
+
+/* ---------- config: frame sequences (swap-in point for Seedance clips) ----------
+   Až budou klipy z Higgsfieldu, extrahují se snímky (ffmpeg) do assets/hero/,
+   assets/builder/, assets/closer/ a tady se jen nastaví count > 0.            */
+const SEQ = {
+  hero:    { dir:'assets/hero/',    count:121, ext:'webp' },  // 0 => procedural placeholder
+  builder: { dir:'assets/builder/', count:97,  ext:'webp' },
+  closer:  { dir:'assets/closer/',  count:97,  ext:'webp' },
+};
+
+/* ---------- Lenis ---------- */
+const lenis = new Lenis({ lerp:.09, wheelMultiplier:1, smoothWheel:true });
+
+/* ---------- scroll state ---------- */
+let scrollY = 0, viewH = innerHeight, viewW = innerWidth;
+lenis.on('scroll', e => { scrollY = e.scroll; });
+addEventListener('resize', () => { viewH = innerHeight; viewW = innerWidth; sizeCanvases(); });
+
+const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+const lerp = (a,b,t) => a + (b-a)*t;
+const ease = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; // easeInOutQuad
+/* progress of an element's scroll range: 0 when top hits viewport top, 1 at end of its extra height */
+function pinProgress(el){
+  const r = el.getBoundingClientRect();
+  const total = el.offsetHeight - viewH;
+  return clamp01(-r.top / total);
+}
+/* progress of element travelling through viewport (enter bottom -> leave top) */
+function viewProgress(el, offset=0){
+  const r = el.getBoundingClientRect();
+  return clamp01((viewH - r.top - offset) / (viewH + r.height));
+}
+
+/* ============================================================
+   HERO ORBIT — canvas frame scrubber (image seq OR procedural)
+   ============================================================ */
+const orbit = document.getElementById('orbitCanvas');
+const octx = orbit.getContext('2d');
+const heroSection = document.getElementById('hero');
+let dpr = Math.min(devicePixelRatio || 1, 2);
+
+function sizeCanvases(){
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  [orbit, pillarsCv, workCv].forEach(cv => {
+    const r = cv.parentElement.getBoundingClientRect();
+    cv.width  = Math.round(r.width  * dpr);
+    cv.height = Math.round(r.height * dpr);
+  });
+}
+
+/* --- image-sequence loader (used once real clips exist) --- */
+function loadSeq(cfg){
+  if (!cfg.count) return null;
+  const frames = new Array(cfg.count);
+  for (let i=0;i<cfg.count;i++){
+    const img = new Image();
+    img.src = `${cfg.dir}frame_${String(i+1).padStart(4,'0')}.${cfg.ext}`;
+    frames[i] = img;
+  }
+  return frames;
+}
+const heroFrames    = loadSeq(SEQ.hero);
+const builderFrames = loadSeq(SEQ.builder);
+const closerFrames  = loadSeq(SEQ.closer);
+/* draw a frame from a sequence at progress p (0..1); returns true if drawn */
+function drawSeqFrame(ctx, frames, w, h, p){
+  if(!frames) return false;
+  const idx=Math.min(frames.length-1,Math.max(0,Math.floor(p*(frames.length-1))));
+  const img=frames[idx];
+  if(img && img.complete && img.naturalWidth){ ctx.clearRect(0,0,w,h); drawCover(ctx,img,w,h); return true; }
+  return false;
+}
+
+/* smoothed orbit progress -> buttery scrub even on jumpy wheel input */
+let orbitTarget = 0, orbitCurrent = 0;
+
+function drawCover(ctx, img, w, h){
+  const s = Math.max(w/img.naturalWidth, h/img.naturalHeight);
+  const dw = img.naturalWidth*s, dh = img.naturalHeight*s;
+  ctx.drawImage(img, (w-dw)/2, (h-dh)/2, dw, dh);
+}
+
+/* --- procedural placeholder: rotating figure in flower studio --- */
+function drawOrbitPlaceholder(ctx, w, h, p){
+  const ang = p * Math.PI * 2;           // 0..360°
+  ctx.clearRect(0,0,w,h);
+
+  // pearl studio backdrop with azure glow following camera
+  const gx = w*.5 + Math.cos(ang)*w*.18;
+  const bg = ctx.createRadialGradient(gx, h*.36, 0, w*.5, h*.5, Math.max(w,h)*.75);
+  bg.addColorStop(0,'#fdfbf5'); bg.addColorStop(.55,'#f3eee2'); bg.addColorStop(1,'#e4ddcc');
+  ctx.fillStyle = bg; ctx.fillRect(0,0,w,h);
+  const glow = ctx.createRadialGradient(gx,h*.42,0,gx,h*.42,w*.42);
+  glow.addColorStop(0,'rgba(143,230,224,.5)'); glow.addColorStop(1,'rgba(143,230,224,0)');
+  ctx.fillStyle = glow; ctx.fillRect(0,0,w,h);
+
+  const cx = w*.5, cy = h*.56, S = Math.min(w,h)/900;
+
+  // orbiting tropical foliage (parallax ring)
+  for (let i=0;i<10;i++){
+    const a = ang + i*Math.PI*2/10;
+    const depth = Math.sin(a);                    // -1 behind .. 1 front
+    const x = cx + Math.cos(a)*w*.34;
+    const y = cy + depth*22*S + h*.02;
+    const sc = (0.65 + (depth+1)*.35) * S;
+    const behind = depth < 0;
+    ctx.save();
+    ctx.translate(x,y); ctx.scale(sc,sc); ctx.rotate(Math.cos(a)*.5);
+    ctx.globalAlpha = behind ? .45 : .8;
+    // monstera-ish leaf
+    ctx.fillStyle = behind ? '#bfd9c8' : (i%3? '#0fa8a3' : '#127a70');
+    ctx.beginPath();
+    ctx.ellipse(0,0,64,110,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(246,242,234,.85)'; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.moveTo(0,-95); ctx.lineTo(0,95); ctx.stroke();
+    for(let s2=-3;s2<=3;s2++){ if(!s2)continue;
+      ctx.beginPath(); ctx.moveTo(0,s2*24); ctx.lineTo(Math.sign(s2)||1?46*Math.sign(s2%2?1:-1):46, s2*24-30); ctx.stroke();
+    }
+    ctx.restore();
+    // white blossoms
+    if (i%2===0){
+      ctx.save(); ctx.translate(x, y-90*sc); ctx.scale(sc,sc); ctx.globalAlpha = behind?.5:.95;
+      for(let k=0;k<6;k++){ ctx.rotate(Math.PI/3);
+        ctx.fillStyle='#fdfaf2'; ctx.beginPath(); ctx.ellipse(0,-18,10,20,0,0,Math.PI*2); ctx.fill(); }
+      ctx.fillStyle='#8fe6e0'; ctx.beginPath(); ctx.arc(0,0,8,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // pedestal
+  ctx.save(); ctx.translate(cx, cy + 205*S);
+  ctx.fillStyle='rgba(13,34,36,.10)';
+  ctx.beginPath(); ctx.ellipse(0,26*S,190*S,34*S,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#efe9db';
+  ctx.beginPath(); ctx.ellipse(0,0,170*S,30*S,0,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  // figure silhouette — yaw simulated by horizontal squash + rim light side
+  ctx.save();
+  ctx.translate(cx, cy);
+  const yaw = Math.cos(ang);                       // 1 front, -1 back
+  const sideX = Math.sin(ang);                     // profile amount
+  const squash = .55 + .45*Math.abs(yaw);          // narrower in profile
+  ctx.scale(S,S);
+  ctx.fillStyle = '#16393c';
+  // torso (arms crossed => wide chest block)
+  ctx.save(); ctx.scale(squash,1);
+  roundRect(ctx,-95,-40,190,215,46); ctx.fill();
+  // shoulders
+  ctx.beginPath(); ctx.ellipse(0,-38,100,44,0,0,Math.PI*2); ctx.fill();
+  // crossed arms bar
+  ctx.fillStyle='#1d474b';
+  roundRect(ctx,-88,18,176,52,26); ctx.fill();
+  ctx.restore();
+  // head
+  ctx.save(); ctx.translate(sideX*10,0); ctx.scale(squash*.9+.1,1);
+  ctx.fillStyle='#16393c';
+  ctx.beginPath(); ctx.ellipse(0,-118,52,60,0,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+  // legs
+  ctx.fillStyle='#122f32';
+  ctx.save(); ctx.scale(squash,1);
+  roundRect(ctx,-72,170,58,145,26); ctx.fill();
+  roundRect(ctx,14,170,58,145,26); ctx.fill();
+  ctx.restore();
+  // azure rim light on the camera-lit side
+  const rimSide = sideX >= 0 ? 1 : -1;
+  const rim = ctx.createLinearGradient(rimSide*110,-160,rimSide*-40,80);
+  rim.addColorStop(0,'rgba(143,230,224,.95)'); rim.addColorStop(1,'rgba(143,230,224,0)');
+  ctx.strokeStyle = rim; ctx.lineWidth = 10; ctx.lineCap='round';
+  ctx.save(); ctx.scale(squash,1);
+  ctx.beginPath();
+  ctx.moveTo(rimSide*52,-172);
+  ctx.quadraticCurveTo(rimSide*106,-96,rimSide*96,40);
+  ctx.quadraticCurveTo(rimSide*88,150,rimSide*70,305);
+  ctx.stroke(); ctx.restore();
+  ctx.restore();
+
+  // camera-orbit hint ring
+  ctx.save();
+  ctx.translate(cx, cy+205*S);
+  ctx.strokeStyle='rgba(15,168,163,.35)'; ctx.lineWidth=2*S; ctx.setLineDash([4*S,10*S]);
+  ctx.beginPath(); ctx.ellipse(0,0,300*S,54*S,0,0,Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]);
+  const dx = Math.cos(ang+Math.PI)*300*S, dy = Math.sin(ang+Math.PI)*54*S;
+  ctx.fillStyle='#0fa8a3'; ctx.beginPath(); ctx.arc(dx,dy,8*S,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+
+/* ---------- hero typography ---------- */
+document.querySelectorAll('.hero-title .line').forEach(line => {
+  [...line.dataset.word].forEach(chr => {
+    const s = document.createElement('span');
+    s.className = 'ch' + (chr===' ' ? ' sp' : '');
+    s.textContent = chr;
+    line.appendChild(s);
+  });
+});
+const chars = [...document.querySelectorAll('.hero-title .ch')];
+const heroSub = document.getElementById('heroSub');
+const orbitBadge = document.getElementById('orbitBadge');
+
+/* ---------- pillars / work placeholder canvases ---------- */
+const pillarsCv = document.getElementById('pillarsMedia');
+const pctx = pillarsCv.getContext('2d');
+const workCv = document.getElementById('workMedia');
+const wctx = workCv.getContext('2d');
+const pillarsSection = document.getElementById('pilire');
+const pillarEls = [...document.querySelectorAll('[data-pillar]')];
+const pillarHead = [...document.querySelectorAll('[data-reveal]')];
+
+/* clip 2 placeholder — dark desk + floating holo screens */
+function drawBuilderPlaceholder(ctx,w,h,t,p){
+  ctx.clearRect(0,0,w,h);
+  const bg = ctx.createLinearGradient(0,0,w,h);
+  bg.addColorStop(0,'#0b1e20'); bg.addColorStop(.6,'#0e2a2c'); bg.addColorStop(1,'#092022');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+  // wooden desk hint
+  const desk = ctx.createLinearGradient(0,h*.72,0,h);
+  desk.addColorStop(0,'#3a2a1c'); desk.addColorStop(1,'#241a12');
+  ctx.fillStyle=desk; ctx.fillRect(0,h*.74,w,h*.26);
+  // zoom-in (slow cinematic push driven by scroll progress p)
+  const z = 1 + p*.14;
+  ctx.save(); ctx.translate(w/2,h/2); ctx.scale(z,z); ctx.translate(-w/2,-h/2);
+  // floating holo screens
+  for (let i=0;i<5;i++){
+    const fx = w*(.16+i*.17) + Math.sin(t*.0006+i*2.1)*14;
+    const fy = h*(.3+(i%2)*.16) + Math.cos(t*.0005+i*1.7)*10;
+    const sw = w*.15, sh = sw*.62;
+    ctx.save(); ctx.translate(fx,fy); ctx.rotate(Math.sin(t*.0004+i)*.04);
+    ctx.fillStyle='rgba(143,230,224,.09)';
+    roundRect(ctx,-sw/2,-sh/2,sw,sh,10); ctx.fill();
+    ctx.strokeStyle='rgba(143,230,224,.55)'; ctx.lineWidth=1.5;
+    roundRect(ctx,-sw/2,-sh/2,sw,sh,10); ctx.stroke();
+    // chart line
+    ctx.strokeStyle='#8fe6e0'; ctx.lineWidth=2.5; ctx.beginPath();
+    for(let x=0;x<=8;x++){
+      const px=-sw/2+sw*x/8, py=sh*.24 - Math.abs(Math.sin(x*1.3+i))*sh*.42;
+      x?ctx.lineTo(px,py):ctx.moveTo(px,py);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+  // floating symbols: arrows & percents
+  ctx.font=`700 ${Math.round(h*.035)}px Manrope`;
+  const syms=['↑','%','▲','+24 %','↗','×3'];
+  syms.forEach((s,i)=>{
+    const sx=w*(.1+i*.155)+Math.cos(t*.0007+i)*18;
+    const sy=h*(.62+((i%3)*.05))+Math.sin(t*.0008+i*2)*14;
+    ctx.fillStyle=i%2?'rgba(143,230,224,.85)':'rgba(249,245,236,.8)';
+    ctx.fillText(s,sx,sy);
+  });
+  // figure silhouette at desk
+  ctx.fillStyle='#071517';
+  ctx.beginPath(); ctx.ellipse(w*.5,h*.60,w*.055,h*.075,0,0,Math.PI*2); ctx.fill(); // head
+  roundRect(ctx,w*.5-w*.085,h*.65,w*.17,h*.16,24); ctx.fill();                       // torso
+  const rim=ctx.createLinearGradient(w*.44,h*.5,w*.56,h*.8);
+  rim.addColorStop(0,'rgba(143,230,224,.8)'); rim.addColorStop(1,'rgba(143,230,224,0)');
+  ctx.strokeStyle=rim; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.arc(w*.5,h*.60,w*.055+3,-.6*Math.PI, .1*Math.PI); ctx.stroke();
+  ctx.restore();
+}
+
+/* clip 3 placeholder — light glass office walk */
+function drawCloserPlaceholder(ctx,w,h,t,p){
+  ctx.clearRect(0,0,w,h);
+  const bg=ctx.createLinearGradient(0,0,0,h);
+  bg.addColorStop(0,'#fbf8f1'); bg.addColorStop(1,'#e9f4f0');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+  // glass panels perspective
+  for(let i=0;i<7;i++){
+    const gx=w*(i/7)+((t*.02+p*w*.25)%(w/7));
+    ctx.fillStyle='rgba(143,230,224,.10)';
+    ctx.fillRect(gx,0,w*.04,h);
+    ctx.fillStyle='rgba(255,255,255,.35)';
+    ctx.fillRect(gx+w*.045,0,w*.008,h);
+  }
+  // light shafts
+  const shaft=ctx.createLinearGradient(w*.2,0,w*.8,h);
+  shaft.addColorStop(0,'rgba(255,255,255,.65)'); shaft.addColorStop(.5,'rgba(255,255,255,0)');
+  ctx.fillStyle=shaft; ctx.fillRect(0,0,w,h);
+  // tropical plants edges
+  [[-.02,.62,1],[1.02,.58,-1]].forEach(([px,py,dir])=>{
+    ctx.save(); ctx.translate(w*px,h*py); ctx.scale(dir,1);
+    ctx.fillStyle='rgba(18,122,112,.55)';
+    for(let k=0;k<5;k++){
+      ctx.save(); ctx.rotate(-.25-k*.22+Math.sin(t*.0006+k)*.02);
+      ctx.beginPath(); ctx.ellipse(w*.09,0,w*.085,w*.023,0,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  });
+  // approaching figure (scale by progress = walking toward camera)
+  const fs = (0.5 + p*0.85) * Math.min(w,h)/900;
+  const bob = Math.sin(p*26)*8*fs*(1-p);   // gait bob settles as he stops
+  ctx.save(); ctx.translate(w*.5, h*.6+bob);
+  ctx.scale(fs,fs);
+  ctx.fillStyle='#16393c';
+  ctx.beginPath(); ctx.ellipse(0,-150,55,64,0,0,Math.PI*2); ctx.fill();
+  roundRect(ctx,-95,-70,190,230,48); ctx.fill();
+  ctx.fillStyle='#122f32';
+  const step=Math.sin(p*26)*(1-p)*22;
+  roundRect(ctx,-70+step,150,56,150,26); ctx.fill();
+  roundRect(ctx,14-step,150,56,150,26); ctx.fill();
+  // smile arc hint (hero pose at end)
+  if(p>.75){
+    ctx.strokeStyle='rgba(249,245,236,.9)'; ctx.lineWidth=6; ctx.lineCap='round';
+    ctx.beginPath(); ctx.arc(0,-140,26,Math.PI*.15,Math.PI*.85); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ---------- stats counters ---------- */
+const statEls=[...document.querySelectorAll('.stat')];
+statEls.forEach(el=>{ el.querySelector('.sfx').textContent = el.dataset.suffix; });
+const statsSection=document.getElementById('stats');
+
+/* ---------- work cards reveal ---------- */
+const cards=[...document.querySelectorAll('.card')];
+const workSection=document.getElementById('prace');
+
+/* ---------- marquee ---------- */
+const mTrack=document.getElementById('marqueeTrack');
+mTrack.innerHTML = mTrack.innerHTML.repeat(6);
+let mX=0;
+
+/* ============================================================
+   MASTER rAF LOOP
+   ============================================================ */
+let lastT=performance.now();
+const bootT=performance.now();
+function raf(t){
+  lenis.raf(t);
+  renderFrame(t);
+  requestAnimationFrame(raf);
+}
+function renderFrame(t){
+  const dt=Math.min(t-lastT,50); lastT=t;
+  /* intro autoplay: letters + subtitle ride in on load, then scroll takes over */
+  const introP=ease(clamp01((t-bootT-350)/1500))*.46;
+
+  /* ----- HERO ----- */
+  const hp = pinProgress(heroSection);
+  orbitTarget = hp;
+  /* frame-rate-independent exp smoothing; ~90ms time constant = tight but buttery */
+  orbitCurrent = lerp(orbitCurrent, orbitTarget, 1-Math.pow(.0000004,dt/1000));
+  const w=orbit.width, h=orbit.height;
+  octx.save(); octx.scale(1,1);
+  if (heroFrames){
+    const idx=Math.min(heroFrames.length-1,Math.floor(orbitCurrent*(heroFrames.length-1)));
+    const img=heroFrames[idx];
+    if(img && img.complete && img.naturalWidth){ octx.clearRect(0,0,w,h); drawCover(octx,img,w,h); }
+  } else {
+    drawOrbitPlaceholder(octx,w,h,orbitCurrent);
+  }
+  octx.restore();
+
+  /* hero letters: staggered rise over first 30 % of pin (or intro autoplay) */
+  const heff=Math.max(hp,introP);
+  const n=chars.length;
+  chars.forEach((c,i)=>{
+    const start=i/(n*1.9), span=.16;
+    const lp=ease(clamp01((heff-start)/span));
+    /* letters also drift out at the very end of the pin */
+    const out=ease(clamp01((hp-.86)/.14));
+    c.style.opacity=lp*(1-out);
+    c.style.transform=`translateY(${(1-lp)*120 - out*60}%) rotate(${(1-lp)*6 - out*3}deg)`;
+  });
+  const subIn=ease(clamp01((heff-.30)/.14)), subOut=ease(clamp01((hp-.86)/.14));
+  heroSub.style.opacity=subIn*(1-subOut);
+  heroSub.style.transform=`translateX(-50%) translateY(${(1-subIn)*30+subOut*24}px)`;
+  orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1))*(1-subOut);
+
+  /* ----- marquee (scroll-reactive speed) ----- */
+  mX-=dt*(.05+Math.abs(lenis.velocity||0)*.004);
+  const one=mTrack.scrollWidth/6;
+  if(-mX>one) mX+=one;
+  mTrack.style.transform=`translateX(${mX}px)`;
+
+  /* ----- STATS ----- */
+  const sp=viewProgress(statsSection,viewH*.12);
+  statEls.forEach((el,i)=>{
+    const p=ease(clamp01((sp-.18-i*.07)/.3));
+    el.style.opacity=p;
+    el.style.transform=`translateY(${(1-p)*60}px)`;
+    const target=+el.dataset.count;
+    el.querySelector('.v').textContent=Math.round(target*ease(clamp01((sp-.2-i*.07)/.42))).toLocaleString('cs-CZ');
+  });
+
+  /* ----- PILLARS (pinned) ----- */
+  const pp=pinProgress(pillarsSection);
+  if (pp>0 && pp<1.001){
+    if(!drawSeqFrame(pctx,builderFrames,pillarsCv.width,pillarsCv.height,pp))
+      drawBuilderPlaceholder(pctx,pillarsCv.width,pillarsCv.height,t,pp);
+  }
+  pillarHead.forEach((el,i)=>{
+    const p=ease(clamp01((pp-.03-i*.05)/.12));
+    el.style.opacity=p; el.style.transform=`translateY(${(1-p)*30}px)`;
+  });
+  pillarEls.forEach((el,i)=>{
+    const p=ease(clamp01((pp-.22-i*.2)/.16));
+    el.style.opacity=p; el.style.transform=`translateX(${(1-p)*-46}px)`;
+  });
+
+  /* ----- WORK ----- */
+  const wp=viewProgress(workSection);
+  if (wp>0 && wp<1){
+    if(!drawSeqFrame(wctx,closerFrames,workCv.width,workCv.height,ease(wp)))
+      drawCloserPlaceholder(wctx,workCv.width,workCv.height,t,ease(wp));
+  }
+  cards.forEach((el,i)=>{
+    const p=ease(clamp01((wp-.22-i*.06)/.2));
+    if(p>=1 && !el.classList.contains('inview')) el.classList.add('inview');
+    if(!el.matches(':hover')){
+      el.style.opacity=p;
+      el.style.transform=`translateY(${(1-p)*70}px)`;
+    } else { el.style.opacity=1; }
+  });
+}
+
+/* debug/verification hook: force a synchronous render at current scroll */
+window.__render = () => { scrollY = window.scrollY; renderFrame(performance.now()); };
+
+sizeCanvases();
+requestAnimationFrame(raf);
+</script>
+</body>
+</html>
