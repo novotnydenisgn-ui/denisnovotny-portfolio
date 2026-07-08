@@ -75,39 +75,43 @@ body{
 #orbitCanvas{position:absolute;inset:0;width:100%;height:100%}
 .hero-vignette{position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
-.hero-title{
-  position:absolute;left:0;right:0;top:50%;transform:translateY(-54%);
-  text-align:center;pointer-events:none;z-index:5;
+.hero-claim{
+  position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);
+  width:min(880px,90vw);text-align:center;pointer-events:none;z-index:5;
+  font-weight:800;font-size:clamp(21px,3.2vw,44px);line-height:1.4;color:var(--cream);
+  text-shadow:0 2px 10px rgba(13,34,36,.55), 0 10px 40px rgba(13,34,36,.45);
 }
-.hero-title .line{display:block;line-height:.92}
-.hero-title .ch{
-  display:inline-block;
-  font-size:clamp(64px,15.5vw,236px);
-  color:var(--cream);
-  -webkit-text-stroke:1px rgba(13,34,36,.10);
-  text-shadow:0 2px 18px rgba(13,34,36,.14), 0 24px 70px rgba(15,168,163,.18);
-  transform:translateY(120%) rotate(6deg);opacity:0;
+.hero-claim .w{
+  display:inline-block;opacity:0;transform:translateY(26px);
   will-change:transform,opacity;
 }
-.hero-title .ch.sp{width:.35em}
-.hero-sub{
-  position:absolute;left:50%;bottom:11vh;transform:translateX(-50%) translateY(30px);
-  width:min(680px,86vw);text-align:center;z-index:6;opacity:0;
-  will-change:transform,opacity;
+.hero-name{
+  position:absolute;left:50%;top:64%;transform:translateX(-50%);
+  text-align:center;pointer-events:none;z-index:5;white-space:nowrap;
+  font-size:clamp(30px,6vw,76px);line-height:1;color:var(--cream);
+  text-shadow:0 2px 12px rgba(13,34,36,.5), 0 14px 50px rgba(15,168,163,.35);
+  opacity:0;will-change:transform,opacity;
 }
-.hero-sub p{
-  font-size:clamp(15px,1.45vw,19px);line-height:1.65;font-weight:600;color:var(--ink-soft);
-  background:var(--glass);border:1px solid var(--glass-brd);border-radius:20px;
-  padding:18px 26px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  box-shadow:0 18px 50px rgba(13,34,36,.10);
-}
+.hero-name em{font-style:normal;color:var(--azure)}
 .hero-hint{
   position:absolute;left:50%;bottom:3.2vh;transform:translateX(-50%);
-  z-index:6;display:flex;align-items:center;gap:10px;
-  font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--teal-deep);
+  z-index:6;display:flex;flex-direction:column;align-items:center;gap:9px;
+  font-size:11px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--cream);
+  text-shadow:0 1px 6px rgba(13,34,36,.6);
 }
-.hero-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.4}}
+.hero-hint .arrow{
+  width:46px;height:46px;border-radius:50%;
+  border:1.5px solid rgba(249,245,236,.9);color:var(--cream);
+  display:grid;place-items:center;
+  background:rgba(13,34,36,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  animation:hintBounce 1.8s cubic-bezier(.45,0,.3,1) infinite;
+}
+.hero-hint .arrow svg{display:block}
+@keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(11px)}}
+@media (max-width:640px){
+  .hero-claim{top:40%;line-height:1.5}
+  .hero-name{top:66%}
+}
 .orbit-badge{
   position:absolute;top:96px;left:50%;transform:translateX(-50%);z-index:6;
   font-size:12px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--teal-deep);
@@ -281,14 +285,14 @@ body{
     <canvas id="orbitCanvas"></canvas>
     <div class="hero-vignette"></div>
     <div class="orbit-badge" id="orbitBadge">Mentoring &amp; Coaching</div>
-    <h1 class="hero-title display" id="heroTitle" aria-label="Denis Novotný">
-      <span class="line" data-word="DENIS"></span>
-      <span class="line" data-word="NOVOTNÝ"></span>
-    </h1>
-    <div class="hero-sub" id="heroSub">
-      <p>Pomáhám podnikatelům ověřenými metodami získat jasnou mysl a&nbsp;systém, který maximalizuje zisk i&nbsp;dopad jejich podnikání — bez chaosu a&nbsp;provizorních řešení.</p>
+    <h1 class="hero-claim" id="heroClaim">Pomáhám podnikatelům ověřenými metodami získat jasnou mysl a&nbsp;systém, který maximalizuje zisk i&nbsp;dopad jejich podnikání — bez chaosu a&nbsp;provizorních řešení.</h1>
+    <div class="hero-name display" id="heroName">Denis <em>Novotný</em></div>
+    <div class="hero-hint" id="heroHint">
+      <span class="arrow" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M5 13l7 7 7-7"/></svg>
+      </span>
+      Scrolluj
     </div>
-    <div class="hero-hint"><span class="dot"></span> Scrolluj — 360°</div>
   </div>
 </section>
 
@@ -601,17 +605,21 @@ function roundRect(ctx,x,y,w,h,r){
   ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
 }
 
-/* ---------- hero typography ---------- */
-document.querySelectorAll('.hero-title .line').forEach(line => {
-  [...line.dataset.word].forEach(chr => {
+/* ---------- hero typography: claim split into words ---------- */
+const heroClaim = document.getElementById('heroClaim');
+{
+  const words = heroClaim.textContent.trim().split(' '); // nbsp zůstává uvnitř slova
+  heroClaim.textContent = '';
+  words.forEach(wd => {
     const s = document.createElement('span');
-    s.className = 'ch' + (chr===' ' ? ' sp' : '');
-    s.textContent = chr;
-    line.appendChild(s);
+    s.className = 'w'; s.textContent = wd;
+    heroClaim.appendChild(s);
+    heroClaim.appendChild(document.createTextNode(' '));
   });
-});
-const chars = [...document.querySelectorAll('.hero-title .ch')];
-const heroSub = document.getElementById('heroSub');
+}
+const claimWords = [...heroClaim.querySelectorAll('.w')];
+const heroName = document.getElementById('heroName');
+const heroHint = document.getElementById('heroHint');
 const orbitBadge = document.getElementById('orbitBadge');
 
 /* ---------- pillars / work placeholder canvases ---------- */
@@ -751,7 +759,7 @@ function raf(t){
 function renderFrame(t){
   const dt=Math.min(t-lastT,50); lastT=t;
   /* intro autoplay: letters + subtitle ride in on load, then scroll takes over */
-  const introP=ease(clamp01((t-bootT-350)/1500))*.46;
+  const introP=ease(clamp01((t-bootT-350)/2100))*.62;
 
   /* ----- HERO ----- */
   const hp = pinProgress(heroSection);
@@ -769,21 +777,22 @@ function renderFrame(t){
   }
   octx.restore();
 
-  /* hero letters: staggered rise over first 30 % of pin (or intro autoplay) */
+  /* hero claim: words rise in one by one (scroll or intro autoplay) */
   const heff=Math.max(hp,introP);
-  const n=chars.length;
-  chars.forEach((c,i)=>{
-    const start=i/(n*1.9), span=.16;
+  const out=ease(clamp01((hp-.86)/.14));
+  const n=claimWords.length;
+  claimWords.forEach((c,i)=>{
+    const start=i/(n*2.4), span=.14;
     const lp=ease(clamp01((heff-start)/span));
-    /* letters also drift out at the very end of the pin */
-    const out=ease(clamp01((hp-.86)/.14));
     c.style.opacity=lp*(1-out);
-    c.style.transform=`translateY(${(1-lp)*120 - out*60}%) rotate(${(1-lp)*6 - out*3}deg)`;
+    c.style.transform=`translateY(${(1-lp)*26 + out*-18}px)`;
   });
-  const subIn=ease(clamp01((heff-.30)/.14)), subOut=ease(clamp01((hp-.86)/.14));
-  heroSub.style.opacity=subIn*(1-subOut);
-  heroSub.style.transform=`translateX(-50%) translateY(${(1-subIn)*30+subOut*24}px)`;
-  orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1))*(1-subOut);
+  /* name below the claim, arrives after the words */
+  const nameIn=ease(clamp01((heff-.42)/.16));
+  heroName.style.opacity=nameIn*(1-out);
+  heroName.style.transform=`translateX(-50%) translateY(${(1-nameIn)*34 + out*-20}px)`;
+  heroHint.style.opacity=ease(clamp01((heff-.1)/.1))*(1-out);
+  orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1))*(1-out);
 
   /* ----- marquee (scroll-reactive speed) ----- */
   mX-=dt*(.05+Math.abs(lenis.velocity||0)*.004);
