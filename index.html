@@ -84,23 +84,41 @@ body{
 .hero-vignette{position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
 .hero-claim{
-  position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);
-  width:min(880px,90vw);text-align:center;pointer-events:none;z-index:5;
-  font-weight:800;font-size:clamp(21px,3.2vw,44px);line-height:1.4;color:var(--cream);
+  position:absolute;left:50%;top:39%;transform:translate(-50%,-50%);
+  width:min(920px,92vw);text-align:center;pointer-events:none;z-index:5;
+  font-family:"League Spartan",sans-serif;font-weight:800;
+  font-size:clamp(24px,3.6vw,52px);line-height:1.22;color:var(--cream);
   text-shadow:0 2px 10px rgba(13,34,36,.6), 0 10px 44px rgba(13,34,36,.55), 0 0 80px rgba(13,34,36,.35);
 }
 .hero-claim .w{
   display:inline-block;opacity:0;transform:translateY(26px);
   will-change:transform,opacity;
 }
-.hero-name{
-  position:absolute;left:50%;top:64%;transform:translateX(-50%);
-  text-align:center;pointer-events:none;z-index:5;white-space:nowrap;
-  font-size:clamp(30px,6vw,76px);line-height:1;color:var(--cream);
-  text-shadow:0 2px 12px rgba(13,34,36,.5), 0 14px 50px rgba(15,168,163,.35);
+/* klíčová slova: barevný přechod uvnitř slova */
+.hero-claim .w.hl{
+  background:linear-gradient(100deg,#12e0cf 5%,var(--azure) 50%,#8fd0ff 95%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;
+  filter:drop-shadow(0 2px 8px rgba(13,34,36,.55));
+}
+.hero-points{
+  position:absolute;left:50%;top:62%;transform:translateX(-50%);z-index:5;
+  display:flex;flex-direction:column;gap:10px;align-items:center;
+  font-family:"League Spartan",sans-serif;font-weight:700;
+  font-size:clamp(15px,1.6vw,20px);color:var(--cream);
+  opacity:0;will-change:transform,opacity;pointer-events:none;
+}
+.hero-points .pt{
+  display:flex;gap:10px;align-items:center;white-space:nowrap;
+  background:rgba(13,34,36,.30);border:1px solid rgba(249,245,236,.25);
+  border-radius:99px;padding:10px 20px 8px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.hero-points .ic{font-size:1.05em;transform:translateY(-1px)}
+.hero-cta{
+  position:absolute;left:50%;top:76%;transform:translateX(-50%);z-index:6;
   opacity:0;will-change:transform,opacity;
 }
-.hero-name em{font-style:normal;color:var(--azure)}
 .hero-hint{
   position:absolute;left:50%;bottom:3.2vh;transform:translateX(-50%);
   z-index:6;display:flex;flex-direction:column;align-items:center;gap:9px;
@@ -117,8 +135,9 @@ body{
 .hero-hint .arrow svg{display:block}
 @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(11px)}}
 @media (max-width:640px){
-  .hero-claim{top:40%;line-height:1.5}
-  .hero-name{top:66%}
+  .hero-claim{top:38%;line-height:1.32}
+  .hero-points{top:60%;font-size:14px}
+  .hero-cta{top:78%}
 }
 /* telefon: kratší pinned sekce = animace naskočí po výrazně kratším scrollu */
 @media (max-width:768px){
@@ -299,8 +318,12 @@ body{
     <canvas id="orbitCanvas"></canvas>
     <div class="hero-vignette"></div>
     <div class="orbit-badge" id="orbitBadge">Mentoring &amp; Coaching</div>
-    <h1 class="hero-claim" id="heroClaim">Pomáhám podnikatelům ověřenými metodami získat jasnou mysl a&nbsp;systém, který maximalizuje zisk i&nbsp;dopad jejich podnikání — bez chaosu a&nbsp;provizorních řešení.</h1>
-    <div class="hero-name display" id="heroName">Denis <em>Novotný</em></div>
+    <h1 class="hero-claim" id="heroClaim">Maximalizuj své <em class="hl">zisky</em> s jasnou <em class="hl">strategií</em> díky ověřenému <em class="hl">systému,</em> funkčnímu marketingu a&nbsp;disciplíně.</h1>
+    <div class="hero-points" id="heroPoints">
+      <span class="pt"><span class="ic">❌</span> Konec chaosu a&nbsp;nedostatku zákazníků</span>
+      <span class="pt"><span class="ic">🚀</span> Motivace a&nbsp;systém v&nbsp;růstu</span>
+    </div>
+    <a class="hero-cta btn btn-primary" id="heroCta" href="#stats">Chci růst</a>
     <div class="hero-hint" id="heroHint">
       <span class="arrow" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M5 13l7 7 7-7"/></svg>
@@ -619,22 +642,33 @@ function roundRect(ctx,x,y,w,h,r){
   ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
 }
 
-/* ---------- hero typography: claim split into words ---------- */
+/* ---------- hero typography: claim split into words (zachová .hl zvýraznění) ---------- */
 const heroClaim = document.getElementById('heroClaim');
 {
-  const words = heroClaim.textContent.trim().split(' '); // nbsp zůstává uvnitř slova
+  const nodes = [...heroClaim.childNodes];
   heroClaim.textContent = '';
-  words.forEach(wd => {
+  const addWord = (txt, hl) => {
+    if(!txt) return;
     const s = document.createElement('span');
-    s.className = 'w'; s.textContent = wd;
+    s.className = 'w' + (hl ? ' hl' : ''); s.textContent = txt;
     heroClaim.appendChild(s);
     heroClaim.appendChild(document.createTextNode(' '));
+  };
+  nodes.forEach(nd => {
+    if (nd.nodeType === 3) nd.textContent.trim().split(' ').forEach(wd => addWord(wd, false)); // nbsp zůstává uvnitř slova
+    else if (nd.nodeType === 1) addWord(nd.textContent, nd.classList.contains('hl'));
   });
 }
 const claimWords = [...heroClaim.querySelectorAll('.w')];
-const heroName = document.getElementById('heroName');
+const heroPoints = document.getElementById('heroPoints');
+const heroCta = document.getElementById('heroCta');
 const heroHint = document.getElementById('heroHint');
 const orbitBadge = document.getElementById('orbitBadge');
+/* CTA: plynulý sjezd na další sekci */
+heroCta.addEventListener('click', e => {
+  e.preventDefault();
+  lenis.scrollTo(document.getElementById('stats').offsetTop - 40, { duration: 1.4 });
+});
 
 /* ---------- pillars / work placeholder canvases ---------- */
 const pillarsCv = document.getElementById('pillarsMedia');
@@ -773,7 +807,7 @@ function raf(t){
 function renderFrame(t){
   const dt=Math.min(t-lastT,50); lastT=t;
   /* intro autoplay: letters + subtitle ride in on load, then scroll takes over */
-  const introP=ease(clamp01((t-bootT-350)/2100))*.62;
+  const introP=ease(clamp01((t-bootT-350)/2100))*.66;
 
   /* ----- HERO ----- */
   const hp = pinProgress(heroSection);
@@ -801,10 +835,14 @@ function renderFrame(t){
     c.style.opacity=lp*(1-out);
     c.style.transform=`translateY(${(1-lp)*26 + out*-18}px)`;
   });
-  /* name below the claim, arrives after the words */
-  const nameIn=ease(clamp01((heff-.42)/.16));
-  heroName.style.opacity=nameIn*(1-out);
-  heroName.style.transform=`translateX(-50%) translateY(${(1-nameIn)*34 + out*-20}px)`;
+  /* odrážky a CTA přijíždějí po slovech claimu */
+  const ptsIn=ease(clamp01((heff-.40)/.14));
+  heroPoints.style.opacity=ptsIn*(1-out);
+  heroPoints.style.transform=`translateX(-50%) translateY(${(1-ptsIn)*30 + out*-16}px)`;
+  const ctaIn=ease(clamp01((heff-.50)/.14));
+  heroCta.style.opacity=ctaIn*(1-out);
+  heroCta.style.transform=`translateX(-50%) translateY(${(1-ctaIn)*26 + out*-14}px)`;
+  heroCta.style.pointerEvents=(ctaIn>.5 && out<.5)?'auto':'none';
   heroHint.style.opacity=ease(clamp01((heff-.1)/.1))*(1-out);
   orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1))*(1-out);
 
