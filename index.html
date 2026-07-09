@@ -80,14 +80,19 @@ body{
 .hdr .cta{
   font-weight:700;font-size:13px;color:var(--ink);text-decoration:none;
   border:1.5px solid var(--ink);border-radius:99px;padding:8px 18px;
-  transition:background .3s,color .3s,opacity .35s ease,transform .35s ease;
+  transition:background .3s,color .3s,border-color .35s ease,padding .35s ease,font-size .35s ease;
 }
 .hdr .cta:hover{background:var(--ink);color:var(--cream)}
-/* po odscrollování: kompaktní lišta jen s texty, tlačítko zmizí */
+/* po odscrollování: kompaktní lišta jen s texty — CTA zůstává, jen bez rámečku */
 .hdr.mini{padding:6px clamp(16px,4vw,56px)}
 .hdr.mini .logo{font-size:14px}
 .hdr.mini .hdr-tag{font-size:10px}
-.hdr.mini .cta{opacity:0;transform:scale(.85);pointer-events:none}
+.hdr.mini .cta{border-color:transparent;padding:6px 2px;font-size:12px}
+/* hover na kompaktní liště: menu se zvětší zpět */
+.hdr.mini:hover{padding:11px clamp(16px,4vw,56px)}
+.hdr.mini:hover .logo{font-size:16px}
+.hdr.mini:hover .hdr-tag{font-size:11px}
+.hdr.mini:hover .cta{border-color:var(--ink);padding:8px 18px;font-size:13px}
 /* ---------- hamburger (telefon) ---------- */
 .hdr-burger{
   display:none;flex-direction:column;gap:5px;
@@ -178,7 +183,7 @@ a.hero-cta{
   width:min(900px,92vw);display:flex;justify-content:center;
   border-radius:22px;
   background:rgba(249,245,236,.13);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
   border:1.5px solid rgba(249,245,236,.55);
   color:var(--cream);
   text-shadow:0 1px 6px rgba(13,34,36,.45);
