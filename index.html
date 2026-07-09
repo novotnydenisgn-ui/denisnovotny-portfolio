@@ -345,6 +345,19 @@ a.hero-cta:hover{
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .btn-ghost:hover{transform:translateY(-5px);background:var(--ink);color:var(--cream)}
+/* finální CTA ve stylu hero tlačítka: široký zaoblený obdélník, barva až na hover */
+.cta-final{
+  width:min(720px,90vw);justify-content:center;
+  border-radius:22px;
+  background:rgba(13,34,36,.05);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1.5px solid var(--ink);
+  color:var(--ink);
+}
+.cta-final:hover{
+  background:var(--teal);border-color:var(--teal);color:#fff;
+  transform:translateY(-4px);box-shadow:0 26px 60px rgba(15,168,163,.4);
+}
 
 /* ---------- footer ---------- */
 .ftr{
@@ -357,6 +370,10 @@ a.hero-cta:hover{
 .ftr-links{display:flex;flex-direction:column;gap:12px;font-weight:700;font-size:15px}
 .ftr-links a{color:rgba(249,245,236,.85);text-decoration:none;display:inline-flex;gap:8px;align-items:center;transition:color .3s}
 .ftr-links a:hover{color:var(--azure)}
+.ftr-dimi img{height:58px;width:auto;opacity:.85;transition:opacity .3s,transform .3s;display:block}
+.ftr-dimi:hover img{opacity:1;transform:translateY(-3px)}
+.ftr-legal a{color:rgba(249,245,236,.6);text-decoration:none;transition:color .3s}
+.ftr-legal a:hover{color:var(--azure)}
 .ftr-bottom{max-width:1280px;margin:44px auto 0;padding-top:22px;border-top:1px solid rgba(249,245,236,.14);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;font-weight:600;color:rgba(249,245,236,.45)}
 
@@ -509,8 +526,7 @@ a.hero-cta:hover{
     <h2 class="finale-h display">Připraven <em>růst</em>?</h2>
     <p class="finale-sub">První krok je nezávazný rozhovor. Zjistíme, kde jsi, kam míříš — a jestli si sedneme.</p>
     <div class="btns">
-      <a class="btn btn-primary" href="https://calendly.com/novotny-denis-gn/leadrship-restart-1-coaching-start-clone" target="_blank" rel="noopener">Pojďme probrat váš růst</a>
-      <a class="btn btn-ghost" href="https://dimi.cz" target="_blank" rel="noopener">Prohlédnout software (dimi.cz)</a>
+      <a class="btn cta-final" href="https://calendly.com/novotny-denis-gn/leadrship-restart-1-coaching-start-clone" target="_blank" rel="noopener">Pojďme probrat váš růst</a>
     </div>
   </div>
 </section>
@@ -519,6 +535,9 @@ a.hero-cta:hover{
 <footer class="ftr">
   <div class="ftr-grid">
     <div class="big">Denis <em>Novotný</em></div>
+    <a class="ftr-dimi" href="https://dimi.cz" target="_blank" rel="noopener" aria-label="Software Dimi">
+      <img src="assets/dimi-logo.svg" alt="Dimi" loading="lazy">
+    </a>
     <nav class="ftr-links">
       <a href="https://dimi.cz" target="_blank" rel="noopener">↗ Web &amp; software — dimi.cz</a>
       <a href="https://www.instagram.com/denis.selfleadrship/" target="_blank" rel="noopener">↗ Instagram — @denis.selfleadrship</a>
@@ -526,6 +545,7 @@ a.hero-cta:hover{
   </div>
   <div class="ftr-bottom">
     <span>© 2026 Denis Novotný — Mentoring &amp; Coaching</span>
+    <span class="ftr-legal"><a href="gdpr.html">Ochrana osobních údajů</a> · <a href="obchodni-podminky.html">Obchodní podmínky</a></span>
     <span>Jasná mysl · Stabilní systém · Maximální dopad</span>
   </div>
 </footer>

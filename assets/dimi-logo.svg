@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="935.663" height="523.971" viewBox="0 0 935.663 523.971">
+  <g>
+    <g>
+      <rect x="207.511" y="115.254" width="56.436" height="175.977" rx="28.218" ry="28.218" transform="translate(502.842 363.012) rotate(170.118)" fill="#e6e6e6" isolation="isolate" opacity=".4"/>
+      <rect x="207.722" y="233.372" width="56.436" height="175.932" rx="28.218" ry="28.218" transform="translate(59.936 -36.361) rotate(10.088)" fill="#e6e6e6" isolation="isolate" opacity=".4"/>
+      <rect x="217.795" y="234" width="56.436" height="56.436" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+    </g>
+    <path d="M225.508,115.576h0s-.004,0-.007,0c-15.538,0-28.133,12.595-28.133,28.133s12.595,28.133,28.133,28.133c.005,0,.011,0,.016,0,50.27.097,90.991,40.327,90.991,89.942s-40.725,89.849-90.997,89.942c-.003,0-.007,0-.01,0-15.538,0-28.133,12.595-28.133,28.133s12.595,28.133,28.133,28.133c.002,0,.004,0,.007,0h0c81.772-.091,148.034-65.514,148.034-146.207s-66.261-146.115-148.034-146.207Z" fill="#e6e6e6"/>
+  </g>
+  <g>
+    <rect x="401.334" y="200.805" width="56.436" height="207.069" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+    <rect x="401.372" y="127.051" width="56.436" height="56.436" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+    <rect x="601.026" y="276.262" width="56.436" height="145.121" rx="28.218" ry="28.218" transform="translate(430.956 -342.775) rotate(45)" fill="#e6e6e6" isolation="isolate" opacity=".4"/>
+    <rect x="443.457" y="185.797" width="56.436" height="175.136" rx="28.218" ry="28.218" transform="translate(-55.148 413.592) rotate(-45)" fill="#e6e6e6" isolation="isolate" opacity=".4"/>
+    <rect x="527.548" y="185.42" width="56.436" height="175.579" rx="28.218" ry="28.218" transform="translate(355.968 -312.965) rotate(45)" fill="#e6e6e6" isolation="isolate" opacity=".4"/>
+    <rect x="681.979" y="234.535" width="56.436" height="56.436" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+    <rect x="569.671" y="203.162" width="56.436" height="204.712" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+    <rect x="485.512" y="287.113" width="56.436" height="56.436" rx="28.218" ry="28.218" fill="#e6e6e6"/>
+  </g>
+</svg>
