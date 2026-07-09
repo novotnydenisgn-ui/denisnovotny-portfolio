@@ -82,10 +82,23 @@ body{
 .hero-stage{position:sticky;top:0;height:100vh;overflow:hidden}
 #orbitCanvas{position:absolute;inset:0;width:100%;height:100%}
 .hero-vignette{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
+  background:
+    linear-gradient(rgba(13,34,36,.10),rgba(13,34,36,.10)),
+    radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
+.hero-panel{
+  position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);z-index:5;
+  width:min(960px,93vw);
+  display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2.8vh,26px);
+  padding:clamp(24px,4.5vh,44px) clamp(18px,4vw,52px);
+  background:rgba(249,245,236,.13);
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:32px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 30px 80px rgba(13,34,36,.28), inset 0 1px 0 rgba(255,255,255,.35);
+  opacity:0;will-change:opacity;
+}
 .hero-claim{
-  position:absolute;left:50%;top:39%;transform:translate(-50%,-50%);
-  width:min(920px,92vw);text-align:center;pointer-events:none;z-index:5;
+  text-align:center;pointer-events:none;
   font-family:"League Spartan",sans-serif;font-weight:800;
   font-size:clamp(24px,3.6vw,52px);line-height:1.22;color:var(--cream);
   text-shadow:0 2px 10px rgba(13,34,36,.6), 0 10px 44px rgba(13,34,36,.55), 0 0 80px rgba(13,34,36,.35);
@@ -102,7 +115,6 @@ body{
   filter:drop-shadow(0 2px 8px rgba(13,34,36,.55));
 }
 .hero-points{
-  position:absolute;left:50%;top:62%;transform:translateX(-50%);z-index:5;
   display:flex;flex-direction:column;gap:10px;align-items:center;
   font-family:"League Spartan",sans-serif;font-weight:700;
   font-size:clamp(15px,1.6vw,20px);color:var(--cream);
@@ -116,7 +128,6 @@ body{
 }
 .hero-points .ic{font-size:1.05em;transform:translateY(-1px)}
 .hero-cta{
-  position:absolute;left:50%;top:76%;transform:translateX(-50%);z-index:6;
   opacity:0;will-change:transform,opacity;
 }
 .hero-hint{
@@ -135,9 +146,9 @@ body{
 .hero-hint .arrow svg{display:block}
 @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(11px)}}
 @media (max-width:640px){
-  .hero-claim{top:38%;line-height:1.32}
-  .hero-points{top:60%;font-size:14px}
-  .hero-cta{top:78%}
+  .hero-panel{top:46%;gap:14px;border-radius:24px}
+  .hero-claim{line-height:1.32}
+  .hero-points{font-size:14px}
 }
 /* telefon: kratší pinned sekce = animace naskočí po výrazně kratším scrollu */
 @media (max-width:768px){
@@ -318,12 +329,14 @@ body{
     <canvas id="orbitCanvas"></canvas>
     <div class="hero-vignette"></div>
     <div class="orbit-badge" id="orbitBadge">Mentoring &amp; Coaching</div>
-    <h1 class="hero-claim" id="heroClaim">Maximalizuj své <em class="hl">zisky</em> s jasnou <em class="hl">strategií</em> díky ověřenému <em class="hl">systému,</em> funkčnímu marketingu a&nbsp;disciplíně.</h1>
-    <div class="hero-points" id="heroPoints">
-      <span class="pt"><span class="ic">❌</span> Konec chaosu a&nbsp;nedostatku zákazníků</span>
-      <span class="pt"><span class="ic">🚀</span> Motivace a&nbsp;systém v&nbsp;růstu</span>
+    <div class="hero-panel" id="heroPanel">
+      <h1 class="hero-claim" id="heroClaim">Maximalizuj své <em class="hl">zisky</em> s jasnou <em class="hl">strategií</em> díky ověřenému <em class="hl">systému,</em> funkčnímu marketingu a&nbsp;disciplíně.</h1>
+      <div class="hero-points" id="heroPoints">
+        <span class="pt"><span class="ic">❌</span> Konec chaosu a&nbsp;nedostatku zákazníků</span>
+        <span class="pt"><span class="ic">🚀</span> Motivace a&nbsp;systém v&nbsp;růstu</span>
+      </div>
+      <a class="hero-cta btn btn-primary" id="heroCta" href="#stats">Chci růst</a>
     </div>
-    <a class="hero-cta btn btn-primary" id="heroCta" href="#stats">Chci růst</a>
     <div class="hero-hint" id="heroHint">
       <span class="arrow" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M5 13l7 7 7-7"/></svg>
@@ -660,6 +673,7 @@ const heroClaim = document.getElementById('heroClaim');
   });
 }
 const claimWords = [...heroClaim.querySelectorAll('.w')];
+const heroPanel = document.getElementById('heroPanel');
 const heroPoints = document.getElementById('heroPoints');
 const heroCta = document.getElementById('heroCta');
 const heroHint = document.getElementById('heroHint');
@@ -825,26 +839,26 @@ function renderFrame(t){
   }
   octx.restore();
 
-  /* hero claim: words rise in one by one (scroll or intro autoplay) */
+  /* hero claim: words rise in one by one (scroll or intro autoplay); nic nemizí */
   const heff=Math.max(hp,introP);
-  const out=ease(clamp01((hp-.86)/.14));
+  heroPanel.style.opacity=ease(clamp01(heff/.06));
   const n=claimWords.length;
   claimWords.forEach((c,i)=>{
     const start=i/(n*2.4), span=.14;
     const lp=ease(clamp01((heff-start)/span));
-    c.style.opacity=lp*(1-out);
-    c.style.transform=`translateY(${(1-lp)*26 + out*-18}px)`;
+    c.style.opacity=lp;
+    c.style.transform=`translateY(${(1-lp)*26}px)`;
   });
   /* odrážky a CTA přijíždějí po slovech claimu */
   const ptsIn=ease(clamp01((heff-.40)/.14));
-  heroPoints.style.opacity=ptsIn*(1-out);
-  heroPoints.style.transform=`translateX(-50%) translateY(${(1-ptsIn)*30 + out*-16}px)`;
+  heroPoints.style.opacity=ptsIn;
+  heroPoints.style.transform=`translateY(${(1-ptsIn)*30}px)`;
   const ctaIn=ease(clamp01((heff-.50)/.14));
-  heroCta.style.opacity=ctaIn*(1-out);
-  heroCta.style.transform=`translateX(-50%) translateY(${(1-ctaIn)*26 + out*-14}px)`;
-  heroCta.style.pointerEvents=(ctaIn>.5 && out<.5)?'auto':'none';
-  heroHint.style.opacity=ease(clamp01((heff-.1)/.1))*(1-out);
-  orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1))*(1-out);
+  heroCta.style.opacity=ctaIn;
+  heroCta.style.transform=`translateY(${(1-ctaIn)*26}px)`;
+  heroCta.style.pointerEvents=ctaIn>.5?'auto':'none';
+  heroHint.style.opacity=ease(clamp01((heff-.1)/.1));
+  orbitBadge.style.opacity=ease(clamp01((heff-.05)/.1));
 
   /* ----- marquee (scroll-reactive speed) ----- */
   mX-=dt*(.05+Math.abs(lenis.velocity||0)*.004);
@@ -855,11 +869,11 @@ function renderFrame(t){
   /* ----- STATS ----- */
   const sp=viewProgress(statsSection,viewH*.12);
   statEls.forEach((el,i)=>{
-    const p=ease(clamp01((sp-.18-i*.07)/.3));
+    const p=ease(clamp01((sp-.10-i*.04)/.2));
     el.style.opacity=p;
     el.style.transform=`translateY(${(1-p)*60}px)`;
     const target=+el.dataset.count;
-    el.querySelector('.v').textContent=Math.round(target*ease(clamp01((sp-.2-i*.07)/.42))).toLocaleString('cs-CZ');
+    el.querySelector('.v').textContent=Math.round(target*ease(clamp01((sp-.12-i*.04)/.2))).toLocaleString('cs-CZ');
   });
 
   /* ----- PILLARS (pinned) ----- */
