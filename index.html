@@ -137,6 +137,7 @@ body{
 .hero-stage{position:sticky;top:0;height:100vh;overflow:hidden}
 #orbitCanvas{position:absolute;inset:0;width:100%;height:100%}
 .hero-dark{position:absolute;inset:0;pointer-events:none;background:#0d2224;opacity:.5;will-change:opacity}
+.hero-light{position:absolute;inset:0;pointer-events:none;background:#f9f5ec;opacity:0;will-change:opacity}
 .hero-vignette{position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 90% 75% at 50% 45%,transparent 55%,rgba(246,242,234,.85) 100%)}
 .hero-panel{
@@ -395,6 +396,7 @@ a.hero-cta:hover{
   <div class="hero-stage">
     <canvas id="orbitCanvas"></canvas>
     <div class="hero-dark" id="heroDark"></div>
+    <div class="hero-light" id="heroLight"></div>
     <div class="hero-vignette"></div>
     <div class="hero-panel" id="heroPanel">
       <div class="hero-points" id="heroPoints">
@@ -760,6 +762,7 @@ const heroClaim = document.getElementById('heroClaim');
 const claimWords = [...heroClaim.querySelectorAll('.w')];
 const heroPanel = document.getElementById('heroPanel');
 const heroDark = document.getElementById('heroDark');
+const heroLight = document.getElementById('heroLight');
 const heroPoints = document.getElementById('heroPoints');
 const heroCta = document.getElementById('heroCta');
 const heroHint = document.getElementById('heroHint');
@@ -943,7 +946,9 @@ function renderFrame(t){
   octx.restore();
 
   /* tmavý překryv videa: 50 % na startu → 0 % při scrollu dolů */
-  heroDark.style.opacity=(.5*(1-ease(clamp01(hp/.6)))).toFixed(3);
+  /* pozadí: tmavé -50 % (start) → 0 (~55 %) → světlé +20 % (dole) */
+  heroDark.style.opacity=(.5*(1-ease(clamp01(hp/.55)))).toFixed(3);
+  heroLight.style.opacity=(.2*ease(clamp01((hp-.55)/.4))).toFixed(3);
   /* kompaktní menu po odscrollování */
   hdrEl.classList.toggle('mini', scrollY>120);
   /* hero claim: words rise in one by one (scroll or intro autoplay); nic nemizí */
