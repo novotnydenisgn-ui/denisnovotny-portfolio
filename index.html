@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/hero/frame_0001.webp">
 <style>
 /* ============================================================
    DENIS NOVOTNÝ — cinematic scroll portfolio
@@ -466,9 +467,9 @@ body{
    Až budou klipy z Higgsfieldu, extrahují se snímky (ffmpeg) do assets/hero/,
    assets/builder/, assets/closer/ a tady se jen nastaví count > 0.            */
 const SEQ = {
-  hero:    { dir:'assets/hero/',    count:91,  ext:'webp' },  // 0 => procedural placeholder
-  builder: { dir:'assets/builder/', count:97,  ext:'webp' },
-  closer:  { dir:'assets/closer/',  count:97,  ext:'webp' },
+  hero:    { dir:'assets/hero/',    count:73, ext:'webp' },  // 0 => procedural placeholder
+  builder: { dir:'assets/builder/', count:64, ext:'webp' },
+  closer:  { dir:'assets/closer/',  count:64, ext:'webp' },
 };
 
 /* ---------- Lenis ---------- */
@@ -511,20 +512,32 @@ function sizeCanvases(){
   });
 }
 
-/* --- image-sequence loader (used once real clips exist) --- */
+/* --- prioritní loader: fronta v pořadí hero → builder → closer,
+       omezená souběžnost = hero je interaktivní během pár sekund,
+       zbytek se dotahuje na pozadí, než k němu uživatel doscrolluje --- */
+const _loadQueue = [];
 function loadSeq(cfg){
   if (!cfg.count) return null;
   const frames = new Array(cfg.count);
   for (let i=0;i<cfg.count;i++){
-    const img = new Image();
-    img.src = `${cfg.dir}frame_${String(i+1).padStart(4,'0')}.${cfg.ext}`;
-    frames[i] = img;
+    frames[i] = new Image();
+    _loadQueue.push({ img:frames[i], src:`${cfg.dir}frame_${String(i+1).padStart(4,'0')}.${cfg.ext}` });
   }
   return frames;
+}
+function pumpQueue(par){
+  const next = () => {
+    const it = _loadQueue.shift();
+    if (!it) return;
+    it.img.onload = it.img.onerror = next;
+    it.img.src = it.src;
+  };
+  for (let k=0;k<par;k++) next();
 }
 const heroFrames    = loadSeq(SEQ.hero);
 const builderFrames = loadSeq(SEQ.builder);
 const closerFrames  = loadSeq(SEQ.closer);
+pumpQueue(8);
 /* draw a frame from a sequence at progress p (0..1); returns true if drawn */
 function drawSeqFrame(ctx, frames, w, h, p){
   if(!frames) return false;
