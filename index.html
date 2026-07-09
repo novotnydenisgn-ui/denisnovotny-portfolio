@@ -396,7 +396,7 @@ a.hero-cta:hover{
 <header class="hdr">
   <a class="logo" href="#">DENIS<em>.</em></a>
   <span class="hdr-tag">Coaching &amp; mentoring</span>
-  <a class="cta" href="#kontakt">Pojďme mluvit</a>
+  <a class="cta" id="hdrCta" href="#kontakt">Pojďme mluvit</a>
   <button class="hdr-burger" id="hdrBurger" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -791,6 +791,11 @@ const hdrEl = document.querySelector('.hdr');
 heroCta.addEventListener('click', e => {
   e.preventDefault();
   lenis.scrollTo(document.getElementById('stats').offsetTop - 40, { duration: 1.4 });
+});
+/* menu CTA "Pojďme mluvit": plynulý sjezd na kontakt (ne nativní cuknutí) */
+document.getElementById('hdrCta').addEventListener('click', e => {
+  e.preventDefault();
+  lenis.scrollTo(document.getElementById('kontakt').offsetTop - 20, { duration: 1.6 });
 });
 /* hamburger menu (telefon) */
 const hdrBurger = document.getElementById('hdrBurger');
