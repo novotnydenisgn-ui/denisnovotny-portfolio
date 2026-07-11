@@ -396,6 +396,159 @@ a.hero-cta:hover{
 @media (prefers-reduced-motion:reduce){
   .grain::before{animation:none}
 }
+
+/* ============================================================
+   SEKCE „Zjisti, co pro tebe mohu udělat" (#sluzby)
+   ============================================================ */
+.offer{
+  position:relative;
+  padding:clamp(90px,14vh,160px) clamp(20px,5vw,72px);
+  background:
+    radial-gradient(900px 480px at 85% 0%, rgba(143,230,224,.22), transparent 65%),
+    radial-gradient(700px 420px at 8% 85%, rgba(15,168,163,.10), transparent 60%),
+    var(--pearl);
+  overflow:hidden;
+}
+.offer-inner{max-width:1100px;margin:0 auto}
+.offer-kicker{
+  font-size:13px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--teal-deep);margin-bottom:20px;
+}
+.offer-h{
+  font-size:clamp(38px,5.6vw,84px);
+  line-height:.98;
+  max-width:820px;
+  margin-bottom:clamp(30px,4.5vh,48px);
+}
+.offer-h em{font-style:normal;color:var(--teal)}
+.offer-seg{
+  display:flex;flex-wrap:wrap;gap:14px;
+  margin-bottom:clamp(56px,9vh,96px);
+}
+.seg-btn{
+  appearance:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:12px;
+  padding:16px 30px;border-radius:99px;
+  font-family:"Manrope",sans-serif;font-weight:800;
+  font-size:clamp(14px,1.15vw,16px);
+  color:var(--ink);
+  background:var(--glass);
+  border:1.5px solid var(--ink);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,background .35s,color .35s,border-color .35s;
+}
+.seg-btn .n{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:50%;
+  font-family:"League Spartan",sans-serif;font-weight:800;font-size:14px;
+  background:var(--ink);color:var(--cream);
+  transition:background .35s,color .35s;
+  padding-top:2px;
+}
+.seg-btn:hover{transform:translateY(-5px);box-shadow:0 18px 46px rgba(13,34,36,.16)}
+.seg-btn.active{
+  background:var(--teal);border-color:var(--teal);color:#fff;
+  box-shadow:0 18px 46px rgba(15,168,163,.4);
+}
+.seg-btn.active .n{background:#fff;color:var(--teal-deep)}
+.timeline{position:relative;padding-left:clamp(64px,8vw,110px)}
+.tl-line{
+  position:absolute;top:0;bottom:0;
+  left:clamp(20px,2.6vw,34px);
+  width:3px;border-radius:3px;
+  background:rgba(18,43,46,.12);
+}
+.tl-progress{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  border-radius:3px;
+  background:linear-gradient(180deg,var(--azure),var(--teal) 40%,var(--teal-deep));
+  box-shadow:0 0 18px rgba(15,168,163,.55);
+  transform:scaleY(0);transform-origin:top center;
+  will-change:transform;
+}
+.phase{position:relative;padding-bottom:clamp(60px,9vh,110px);scroll-margin-top:130px}
+.phase:last-child{padding-bottom:0}
+.ph-dot{
+  position:absolute;top:0;
+  left:calc(clamp(20px,2.6vw,34px) - clamp(64px,8vw,110px) + 1.5px);
+  transform:translateX(-50%);
+  width:clamp(48px,5vw,64px);height:clamp(48px,5vw,64px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"League Spartan",sans-serif;font-weight:800;
+  font-size:clamp(20px,2.2vw,28px);padding-top:3px;
+  color:var(--ink-soft);
+  background:var(--cream);
+  border:2px solid rgba(18,43,46,.15);
+  transition:background .5s,color .5s,border-color .5s,box-shadow .5s,transform .5s cubic-bezier(.2,.8,.2,1);
+  z-index:2;
+}
+.phase.lit .ph-dot{
+  background:var(--teal);color:#fff;border-color:var(--teal);
+  box-shadow:0 0 0 8px rgba(15,168,163,.15),0 14px 38px rgba(15,168,163,.45);
+  transform:translateX(-50%) scale(1.06);
+}
+.ph-card{
+  background:rgba(255,255,255,.5);
+  border:1px solid var(--glass-brd);
+  border-radius:var(--radius);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 60px rgba(13,34,36,.09);
+  padding:clamp(26px,3.4vw,46px);
+  opacity:0;transform:translateY(60px);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1),box-shadow .45s;
+}
+.ph-card.in{opacity:1;transform:translateY(0)}
+.ph-card:hover{box-shadow:0 40px 90px rgba(15,168,163,.22)}
+.ph-tag{
+  display:inline-block;
+  font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--teal-deep);
+  background:var(--azure-soft);
+  border-radius:99px;padding:8px 18px 7px;
+  margin-bottom:16px;
+}
+.ph-card h3{
+  font-size:clamp(24px,3vw,42px);
+  line-height:1;
+  margin-bottom:8px;
+}
+.ph-lead{
+  font-size:clamp(14px,1.25vw,17px);font-weight:600;line-height:1.6;
+  color:var(--ink-soft);
+  margin-bottom:22px;max-width:640px;
+}
+.ph-list{list-style:none;display:grid;gap:12px}
+.phase[data-phase="2"] .ph-list{grid-template-columns:repeat(2,1fr);column-gap:clamp(18px,2.5vw,34px)}
+.ph-list li{
+  position:relative;
+  padding-left:34px;
+  font-size:clamp(14px,1.2vw,16.5px);font-weight:600;line-height:1.5;
+  color:var(--ink);
+}
+.ph-list li::before{
+  content:"";
+  position:absolute;left:0;top:1px;
+  width:22px;height:22px;
+  background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%230fa8a3"/><path d="M7.8 12.4l2.7 2.7 5.5-6" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>') center/contain no-repeat;
+}
+.ph-list li em{font-style:normal;color:var(--ink-soft);font-weight:500}
+@media (max-width:900px){
+  .phase[data-phase="2"] .ph-list{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .offer-seg{gap:10px}
+  .seg-btn{padding:13px 20px;font-size:13.5px;gap:9px}
+  .seg-btn .n{width:22px;height:22px;font-size:12px}
+  .timeline{padding-left:52px}
+  .tl-line{left:16px}
+  .ph-dot{width:44px;height:44px;font-size:19px}
+  .phase{scroll-margin-top:90px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ph-card{opacity:1;transform:none;transition:none}
+  .seg-btn,.ph-dot{transition:none}
+}
 </style>
 </head>
 <body>
@@ -468,6 +621,79 @@ a.hero-cta:hover{
     <div class="stat" data-count="2000" data-suffix="h">
       <div class="num"><span class="v">0</span><i class="sfx"></i></div>
       <div class="lbl">koučovací praxe</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CO PRO TEBE MOHU UDĚLAT ============ -->
+<section class="offer" id="sluzby">
+  <div class="offer-inner">
+
+    <div class="offer-kicker">Kde se dnes nacházíš?</div>
+    <h2 class="offer-h display">Zjisti, co pro tebe <em>mohu udělat</em></h2>
+
+    <div class="offer-seg" role="tablist" aria-label="Fáze podnikání">
+      <button class="seg-btn" data-goto="faze-1"><span class="n">1</span>Začínám podnikat</button>
+      <button class="seg-btn" data-goto="faze-2"><span class="n">2</span>Podnikám 1–5 let</button>
+      <button class="seg-btn" data-goto="faze-3"><span class="n">3</span>Podnikám déle než 5 let</button>
+    </div>
+
+    <div class="timeline" id="offerTimeline">
+      <div class="tl-line"><div class="tl-progress" id="tlProgress"></div></div>
+
+      <!-- FÁZE 1 -->
+      <article class="phase" data-phase="1" id="faze-1">
+        <div class="ph-dot">1</div>
+        <div class="ph-card">
+          <span class="ph-tag">Začínám podnikat</span>
+          <h3 class="display">Základy a směr</h3>
+          <p class="ph-lead">Postavíme pevné základy, ze kterých se dá růst — jasný směr, funkční strategie a návyky, které tě u toho udrží.</p>
+          <ul class="ph-list">
+            <li>Definujeme směr a odklidíme prvotní překážky</li>
+            <li>Nastavíme strategii a mindset úspěšného podnikatele</li>
+            <li>Budujeme disciplínu v konkrétních krocích k cíli</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- FÁZE 2 -->
+      <article class="phase" data-phase="2" id="faze-2">
+        <div class="ph-dot">2</div>
+        <div class="ph-card">
+          <span class="ph-tag">Podnikám 1–5 let</span>
+          <h3 class="display">Systém a růst</h3>
+          <p class="ph-lead">Z podnikání „na sílu" uděláme systém — procesy, marketing a automatizace, které rostou i bez tvého neustálého dohledu.</p>
+          <ul class="ph-list">
+            <li>Výstavba systému pro tvé podnikání <em>(web, doména, CRM, procesy…)</em></li>
+            <li>Průběžná analýza a optimalizace toho, co funguje</li>
+            <li>Zapojení marketingových systémů <em>(DRM, e‑mailing, Meta Ads, sociální sítě…)</em></li>
+            <li>Automatizace operativy</li>
+            <li>Implementace AI do každodenních procesů</li>
+            <li>Průběžný audit marketingu</li>
+            <li>Optimalizace pro škálování a digitalizaci</li>
+            <li>Interní aplikace na míru tvému podnikání</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- FÁZE 3 -->
+      <article class="phase" data-phase="3" id="faze-3">
+        <div class="ph-dot">3</div>
+        <div class="ph-card">
+          <span class="ph-tag">Podnikám déle než 5 let</span>
+          <h3 class="display">Vrchol bez vyhoření</h3>
+          <p class="ph-lead">Dosáhl jsi hodně — teď jde o to udržet to zdravě. Vize, leadership a energie, která vydrží.</p>
+          <ul class="ph-list">
+            <li>Refresh vize a životního směřování — ICF coaching</li>
+            <li>Podchycení vyhoření a podpora seberealizace</li>
+            <li>Leadership coaching — vedení lidí, kteří táhnou s tebou</li>
+            <li>Delegování a tým, který funguje i bez tebe</li>
+            <li>Strategie dalšího růstu — nové trhy, produkty, škálování</li>
+            <li>Dlouhodobá udržitelnost a rovnováha mezi byznysem a životem</li>
+          </ul>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -946,6 +1172,27 @@ const statsSection=document.getElementById('stats');
 const cards=[...document.querySelectorAll('.card')];
 const workSection=document.getElementById('prace');
 
+/* ---------- OFFER: časová osa „Co pro tebe mohu udělat" ---------- */
+const offerTimeline = document.getElementById('offerTimeline');
+const tlProgress    = document.getElementById('tlProgress');
+const offerPhases   = [...document.querySelectorAll('#offerTimeline .phase')];
+const offerButtons  = [...document.querySelectorAll('.offer-seg .seg-btn')];
+const offerReduced  = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* tlačítka → plynulý scroll na fázi (přes Lenis, ať se scroll nepere) */
+offerButtons.forEach(btn => btn.addEventListener('click', () => {
+  const el = document.getElementById(btn.dataset.goto);
+  if (el) lenis.scrollTo(el, { offset:-96, duration: offerReduced ? 0 : 1.1 });
+}));
+/* reveal karet — jednorázově při vstupu do viewportu */
+if (!offerReduced && 'IntersectionObserver' in window){
+  const offerIO = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add('in'); offerIO.unobserve(e.target); }
+  }), { threshold:.18 });
+  document.querySelectorAll('#offerTimeline .ph-card').forEach(c => offerIO.observe(c));
+} else {
+  document.querySelectorAll('#offerTimeline .ph-card').forEach(c => c.classList.add('in'));
+}
+
 /* ---------- marquee ---------- */
 const mTrack=document.getElementById('marqueeTrack');
 mTrack.innerHTML = mTrack.innerHTML.repeat(6);
@@ -1023,6 +1270,22 @@ function renderFrame(t){
     const target=+el.dataset.count;
     el.querySelector('.v').textContent=Math.round(target*ease(clamp01((sp-.12-i*.04)/.2))).toLocaleString('cs-CZ');
   });
+
+  /* ----- OFFER (časová osa: vybarvení linky + rozsvícení uzlů + aktivní tlačítko) ----- */
+  {
+    const tr = offerTimeline.getBoundingClientRect();
+    const lineH = tr.height || 1;
+    const fill = clamp01((viewH*.55 - tr.top)/lineH) * lineH;
+    tlProgress.style.transform = `scaleY(${(fill/lineH).toFixed(4)})`;
+    let activeIdx = -1;
+    offerPhases.forEach((ph,i)=>{
+      const dot = ph.querySelector('.ph-dot');
+      const dotMid = dot.getBoundingClientRect().top - tr.top + dot.offsetHeight/2;
+      if (fill >= dotMid){ ph.classList.add('lit'); activeIdx = i; }
+      else ph.classList.remove('lit');
+    });
+    offerButtons.forEach((b,i)=> b.classList.toggle('active', i===activeIdx));
+  }
 
   /* ----- PILLARS (pinned) ----- */
   const pp=pinProgress(pillarsSection);
