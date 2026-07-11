@@ -403,13 +403,23 @@ a.hero-cta:hover{
 .offer{
   position:relative;
   padding:clamp(90px,14vh,160px) clamp(20px,5vw,72px);
-  background:
-    radial-gradient(900px 480px at 85% 0%, rgba(143,230,224,.22), transparent 65%),
-    radial-gradient(700px 420px at 8% 85%, rgba(15,168,163,.10), transparent 60%),
-    var(--pearl);
-  overflow:hidden;
+  background:var(--pearl);           /* plochý základ = plynule navazuje na sekci s čísly */
+  overflow:visible;
 }
-.offer-inner{max-width:1100px;margin:0 auto}
+/* dekorativní teal záře — prolne se přes hranici nahoru do sekce s čísly
+   a dole vyfade; maska = žádný tvrdý šev na začátku ani konci sekce */
+.offer::before{
+  content:"";
+  position:absolute;left:0;right:0;
+  top:clamp(-260px,-20vh,-140px);bottom:0;
+  pointer-events:none;z-index:0;
+  background:
+    radial-gradient(1000px 560px at 82% 24%, rgba(143,230,224,.20), transparent 60%),
+    radial-gradient(760px 460px at 6% 88%, rgba(15,168,163,.08), transparent 60%);
+  -webkit-mask:linear-gradient(180deg,transparent 0,#000 18%,#000 86%,transparent 100%);
+  mask:linear-gradient(180deg,transparent 0,#000 18%,#000 86%,transparent 100%);
+}
+.offer-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
 .offer-kicker{
   font-size:13px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;
   color:var(--teal-deep);margin-bottom:20px;
