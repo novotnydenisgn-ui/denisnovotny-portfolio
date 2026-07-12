@@ -1465,8 +1465,8 @@ const gArea=document.querySelector('.stats-chart .garea');
 const gClipRect=document.getElementById('gClipRect');
 const gDot=document.getElementById('growthDot');
 const gVB={w:1200,h:520};
-/* nepravidelné schody (rozestupy i amplitudy), trend vzhůru */
-const GPTS=[[0,458],[52,414],[98,438],[172,346],[216,380],[302,290],[344,334],[432,226],[470,260],[558,190],[608,228],[702,124],[746,190],[824,102],[898,138],[964,60],[1030,98],[1104,40],[1146,72],[1200,30]];
+/* reálný trend (dle referenčního grafu 00–23): náběh → plató → propad → růst → špička → prudký závěr */
+const GPTS=[[0,462],[52,443],[104,441],[157,437],[209,418],[261,393],[313,360],[365,335],[417,337],[470,352],[522,360],[574,354],[626,350],[678,348],[730,308],[783,280],[835,269],[887,258],[939,261],[991,231],[1043,242],[1096,195],[1148,126],[1200,52]];
 /* lomená čára s lehce zaoblenými rohy */
 function gPath(pts,r){
   let d='M'+pts[0][0]+','+pts[0][1];
@@ -1481,7 +1481,7 @@ function gPath(pts,r){
   return d;
 }
 if(gLine){
-  const gD=gPath(GPTS,16);
+  const gD=gPath(GPTS,12);
   gLine.setAttribute('d',gD);
   gArea.setAttribute('d',gD+' L1200,520 L0,520 Z');
 }
