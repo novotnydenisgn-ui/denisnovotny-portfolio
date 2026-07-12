@@ -594,8 +594,19 @@ a.hero-cta:hover{
   .seg-btn .n{width:22px;height:22px;font-size:12px}
   .timeline{padding-left:52px}
   .tl-line{left:16px}
-  .ph-dot{width:44px;height:44px;font-size:19px}
+  /* uzel zarovnat na střed linky (16px+1.5) v rámci .phase (posun o padding-left 52px) */
+  .ph-dot{width:44px;height:44px;font-size:19px;left:calc(16px - 52px + 1.5px)}
   .phase{scroll-margin-top:90px}
+  /* pinned pilíře: obsah shora pod hlavičku, zmenšit ať se vejde do 100vh */
+  .pillars-content{justify-content:flex-start;padding-top:calc(64px + 2.4vh);padding-bottom:2vh}
+  .pillars-kicker{margin-bottom:1.2vh}
+  .pillars-h{font-size:clamp(36px,10.5vw,58px);margin-bottom:2.4vh}
+  .pillar{padding:1.5vh 0;gap:10px 16px}
+  .pillar h3{font-size:22px}
+  .pillar p{font-size:13px;line-height:1.5;margin-top:5px}
+  .pillar .ic{width:46px;height:46px;border-radius:14px}
+  /* area graf: zploštit ~o polovinu (svislé pásmo místo celé výšky sekce) */
+  .stats-chart{top:auto;bottom:0;height:56%}
 }
 @media (prefers-reduced-motion:reduce){
   .ph-card{opacity:1;transform:none;transition:none}
