@@ -1465,8 +1465,8 @@ const gArea=document.querySelector('.stats-chart .garea');
 const gClipRect=document.getElementById('gClipRect');
 const gDot=document.getElementById('growthDot');
 const gVB={w:1200,h:520};
-/* reálný trend (dle referenčního grafu 00–23): náběh → plató → propad → růst → špička → prudký závěr */
-const GPTS=[[0,462],[52,443],[104,441],[157,437],[209,418],[261,393],[313,360],[365,335],[417,337],[470,352],[522,360],[574,354],[626,350],[678,348],[730,308],[783,280],[835,269],[887,258],[939,261],[991,231],[1043,242],[1096,195],[1148,126],[1200,52]];
+/* reálný trend (dle referenčního grafu 00–23): klidnější část vlevo, zlom za polovinou → prudký závěr vpravo */
+const GPTS=[[0,462],[35,443],[70,441],[105,437],[140,418],[175,393],[210,360],[245,335],[280,337],[315,352],[350,360],[385,354],[420,350],[455,348],[490,308],[525,280],[560,269],[595,258],[630,261],[665,231],[700,242],[867,195],[1033,126],[1200,52]];
 /* lomená čára s lehce zaoblenými rohy */
 function gPath(pts,r){
   let d='M'+pts[0][0]+','+pts[0][1];
