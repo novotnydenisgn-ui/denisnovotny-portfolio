@@ -273,9 +273,8 @@ a.hero-cta:hover{
 .stats-chart .garea{fill:url(#gArea)}
 .stats-chart .gline{stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:.6;
   filter:drop-shadow(0 3px 10px rgba(15,168,163,.4))}
-.gdot{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;z-index:3;opacity:0;
-  background:radial-gradient(circle at 35% 35%,#fff,var(--azure) 55%,var(--teal) 100%);
-  box-shadow:0 0 0 4px rgba(143,230,224,.35),0 0 18px 4px rgba(15,168,163,.7);pointer-events:none}
+.gdot{position:absolute;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;z-index:3;opacity:0;
+  background:var(--teal);pointer-events:none}
 .stats-inner{position:relative;z-index:1}
 
 /* ---------- dovednosti: donut ukazatele ---------- */
@@ -758,9 +757,10 @@ a.hero-cta:hover{
           <stop offset="0" stop-color="#8fe6e0"/>
           <stop offset="1" stop-color="#0fa8a3"/>
         </linearGradient>
+        <clipPath id="gClip"><rect id="gClipRect" x="0" y="0" width="0" height="520"/></clipPath>
       </defs>
-      <path class="garea" d="M0,440 L70,368 L140,404 L210,312 L280,352 L350,258 L420,306 L490,208 L560,262 L630,160 L700,214 L770,120 L840,168 L910,84 L980,132 L1050,58 L1120,96 L1200,34 L1200,520 L0,520 Z"/>
-      <path class="gline" id="statsLine" d="M0,440 L70,368 L140,404 L210,312 L280,352 L350,258 L420,306 L490,208 L560,262 L630,160 L700,214 L770,120 L840,168 L910,84 L980,132 L1050,58 L1120,96 L1200,34" fill="none" vector-effect="non-scaling-stroke"/>
+      <path class="garea" clip-path="url(#gClip)"/>
+      <path class="gline" id="statsLine" clip-path="url(#gClip)" fill="none" vector-effect="non-scaling-stroke"/>
     </svg>
     <span class="gdot" id="growthDot"></span>
   </div>
@@ -1462,10 +1462,38 @@ const statsSection=document.getElementById('stats');
 /* ---------- stats: area graf + donuty ---------- */
 const gLine=document.getElementById('statsLine');
 const gArea=document.querySelector('.stats-chart .garea');
+const gClipRect=document.getElementById('gClipRect');
 const gDot=document.getElementById('growthDot');
 const gVB={w:1200,h:520};
-let gLen=1;
-if(gLine){ gLen=gLine.getTotalLength(); gLine.style.strokeDasharray=gLen; gLine.style.strokeDashoffset=gLen; }
+/* nepravidelné schody (rozestupy i amplitudy), trend vzhůru */
+const GPTS=[[0,458],[52,414],[98,438],[172,346],[216,380],[302,290],[344,334],[432,226],[470,260],[558,190],[608,228],[702,124],[746,190],[824,102],[898,138],[964,60],[1030,98],[1104,40],[1146,72],[1200,30]];
+/* lomená čára s lehce zaoblenými rohy */
+function gPath(pts,r){
+  let d='M'+pts[0][0]+','+pts[0][1];
+  for(let i=1;i<pts.length-1;i++){
+    const px=pts[i-1][0],py=pts[i-1][1],cx=pts[i][0],cy=pts[i][1],nx=pts[i+1][0],ny=pts[i+1][1];
+    const dl=Math.hypot(cx-px,cy-py),dn=Math.hypot(nx-cx,ny-cy);
+    const r1=Math.min(r,dl/2),r2=Math.min(r,dn/2);
+    d+=' L'+(cx-(cx-px)/dl*r1).toFixed(1)+','+(cy-(cy-py)/dl*r1).toFixed(1);
+    d+=' Q'+cx+','+cy+' '+(cx+(nx-cx)/dn*r2).toFixed(1)+','+(cy+(ny-cy)/dn*r2).toFixed(1);
+  }
+  d+=' L'+pts[pts.length-1][0]+','+pts[pts.length-1][1];
+  return d;
+}
+if(gLine){
+  const gD=gPath(GPTS,16);
+  gLine.setAttribute('d',gD);
+  gArea.setAttribute('d',gD+' L1200,520 L0,520 Z');
+}
+function gYat(x){
+  for(let i=1;i<GPTS.length;i++){
+    if(x<=GPTS[i][0]){
+      const x0=GPTS[i-1][0],y0=GPTS[i-1][1],x1=GPTS[i][0],y1=GPTS[i][1];
+      return y0+(y1-y0)*((x-x0)/((x1-x0)||1));
+    }
+  }
+  return GPTS[GPTS.length-1][1];
+}
 const skillEls=[...document.querySelectorAll('.skill')];
 const D_C=2*Math.PI*48;
 skillEls.forEach(el=>{ const c=el.querySelector('.d-fill'); c.style.strokeDasharray=D_C; c.style.strokeDashoffset=D_C; });
@@ -1633,11 +1661,10 @@ function renderFrame(t){
   /* ----- STATS: area graf na pozadí (kreslení + neonová tečka) + donuty ----- */
   if(gLine){
     const draw=ease(clamp01((sp-.10)/.55));
-    gLine.style.strokeDashoffset=(gLen*(1-draw)).toFixed(1);
-    gArea.style.clipPath=`inset(0 ${((1-draw)*100).toFixed(2)}% 0 0)`;
-    const pt=gLine.getPointAtLength(gLen*draw);
-    gDot.style.left=(pt.x/gVB.w*100).toFixed(2)+'%';
-    gDot.style.top=(pt.y/gVB.h*100).toFixed(2)+'%';
+    const gx=gVB.w*draw;
+    gClipRect.setAttribute('width',gx.toFixed(1));
+    gDot.style.left=(draw*100).toFixed(2)+'%';
+    gDot.style.top=(gYat(gx)/gVB.h*100).toFixed(2)+'%';
     gDot.style.opacity=draw>.001?1:0;
     skillEls.forEach((el,i)=>{
       const p=ease(clamp01((sp-.22-i*.045)/.25));
