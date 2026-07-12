@@ -1660,7 +1660,7 @@ function renderFrame(t){
 
   /* ----- STATS: area graf na pozadí (kreslení + neonová tečka) + donuty ----- */
   if(gLine){
-    const draw=ease(clamp01((sp-.10)/.55));
+    const draw=ease(clamp01((sp-.02)/.44));
     const gx=gVB.w*draw;
     gClipRect.setAttribute('width',gx.toFixed(1));
     gDot.style.left=(draw*100).toFixed(2)+'%';
