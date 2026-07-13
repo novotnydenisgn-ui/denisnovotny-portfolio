@@ -634,6 +634,8 @@ a.hero-cta:hover{
   background:linear-gradient(158deg,#164a49,#0d2224 58%,#0b3b39);
   box-shadow:0 34px 80px rgba(13,34,36,.30);border:1px solid rgba(255,255,255,.14)}
 .ref-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:#0d2224;cursor:pointer}
+.ref-embed{position:absolute;inset:0;width:100%;height:100%;z-index:5;border:0}
+.ref-video.playing::after{opacity:0}
 .ref-video::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;transition:opacity .3s;
   background:linear-gradient(180deg,rgba(0,0,0,.42),transparent 24%,transparent 70%,rgba(0,0,0,.46))}
 .ref-video.playing .ref-vtop,.ref-video.playing .ref-play,.ref-video.playing .ref-vbar{opacity:0;pointer-events:none}
@@ -964,10 +966,7 @@ a.hero-cta:hover{
              sem se později vloží <video> nebo Vimeo/YouTube <iframe>. -->
 
         <article class="ref-slide is-active">
-          <div class="ref-video">
-            <video class="ref-vid" playsinline preload="none" poster="assets/reference/lukas-berka-poster.jpg">
-              <source src="assets/reference/lukas-berka.mp4" type="video/mp4">
-            </video>
+          <div class="ref-video" data-vimeo="1101320230">
             <div class="ref-vtop">
               <span class="ref-ava" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
               <span class="ref-cap"><b>Lukáš Berka — Reference</b><span>DENIS.</span></span>
@@ -1557,6 +1556,7 @@ if (!offerReduced && 'IntersectionObserver' in window){
     dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
     /* při přepnutí zastav a resetuj běžící video */
     track.querySelectorAll('.ref-vid').forEach(v=>{ v.pause(); });
+    track.querySelectorAll('.ref-embed').forEach(f=>f.remove());
     track.querySelectorAll('.ref-video.playing').forEach(b=>b.classList.remove('playing'));
   }
   prev.addEventListener('click',()=>go(idx-1));
@@ -1564,9 +1564,25 @@ if (!offerReduced && 'IntersectionObserver' in window){
 
   /* přehrávání reálných videí (slidy s <video>) */
   track.querySelectorAll('.ref-video').forEach(box=>{
+    const play = box.querySelector('.ref-play');
+    /* Vimeo facade — iframe se načte až po kliknutí na Play */
+    if (box.dataset.vimeo){
+      const start = ()=>{
+        if (box.classList.contains('playing')) return;
+        box.classList.add('playing');
+        const f = document.createElement('iframe');
+        f.className = 'ref-embed';
+        f.src = 'https://player.vimeo.com/video/'+box.dataset.vimeo+'?autoplay=1&title=0&byline=0&portrait=0&dnt=1';
+        f.allow = 'autoplay; fullscreen; picture-in-picture';
+        f.setAttribute('allowfullscreen','');
+        f.loading = 'lazy';
+        box.insertBefore(f, box.firstChild);
+      };
+      if (play) play.addEventListener('click', start);
+      return;
+    }
     const v = box.querySelector('.ref-vid');
     if (!v) return;
-    const play = box.querySelector('.ref-play');
     const start = ()=>{ box.classList.add('playing'); v.play(); };
     if (play) play.addEventListener('click', start);
     v.addEventListener('click', ()=>{ if(v.paused) start(); else v.pause(); });
