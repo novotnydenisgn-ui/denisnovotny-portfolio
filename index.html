@@ -473,9 +473,19 @@ a.hero-cta:hover{
   margin-bottom:clamp(30px,4.5vh,48px);
 }
 .offer-h em{font-style:normal;color:var(--teal)}
+/* ukotvený panel: kicker + přepínače fází — drží pod hlavičkou po celou sekci */
+.offer-nav{
+  position:sticky;top:64px;z-index:40;
+  margin:0 0 clamp(46px,7vh,84px);
+  padding:14px clamp(16px,2vw,24px) 16px;border-radius:22px;
+  background:rgba(246,242,234,.80);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 16px 44px rgba(13,34,36,.10);
+}
+.offer-nav .offer-kicker{margin-bottom:12px}
 .offer-seg{
   display:flex;flex-wrap:wrap;gap:14px;
-  margin-bottom:clamp(56px,9vh,96px);
 }
 .seg-btn{
   appearance:none;cursor:pointer;
@@ -596,6 +606,7 @@ a.hero-cta:hover{
   .tl-line{left:16px}
   /* uzel zarovnat na střed linky (16px+1.5) v rámci .phase (posun o padding-left 52px) */
   .ph-dot{width:44px;height:44px;font-size:19px;left:calc(16px - 52px + 1.5px)}
+  .offer-nav{top:60px;padding:11px 14px 13px;border-radius:18px}
   .phase{scroll-margin-top:90px}
   /* pinned pilíře: obsah shora pod hlavičku, zmenšit ať se vejde do 100vh */
   .pillars-content{justify-content:flex-start;padding-top:calc(64px + 2.4vh);padding-bottom:2vh}
@@ -851,13 +862,15 @@ a.hero-cta:hover{
 <section class="offer" id="sluzby">
   <div class="offer-inner">
 
-    <div class="offer-kicker">Kde se dnes nacházíš?</div>
     <h2 class="offer-h display">Zjisti, co pro tebe <em>mohu udělat</em></h2>
 
-    <div class="offer-seg" role="tablist" aria-label="Fáze podnikání">
-      <button class="seg-btn" data-goto="faze-1"><span class="n">1</span>Začínám podnikat</button>
-      <button class="seg-btn" data-goto="faze-2"><span class="n">2</span>Podnikám 1–5 let</button>
-      <button class="seg-btn" data-goto="faze-3"><span class="n">3</span>Podnikám déle než 5 let</button>
+    <div class="offer-nav">
+      <div class="offer-kicker">Kde se dnes nacházíš?</div>
+      <div class="offer-seg" role="tablist" aria-label="Fáze podnikání">
+        <button class="seg-btn" data-goto="faze-1"><span class="n">1</span>Začínám podnikat</button>
+        <button class="seg-btn" data-goto="faze-2"><span class="n">2</span>Podnikám 1–5 let</button>
+        <button class="seg-btn" data-goto="faze-3"><span class="n">3</span>Podnikám déle než 5 let</button>
+      </div>
     </div>
 
     <div class="timeline" id="offerTimeline">
